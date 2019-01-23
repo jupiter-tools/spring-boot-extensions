@@ -75,6 +75,7 @@
     <modules>
         <module>spring-test-rabbitmq</module>
         <module>spring-test-postgres</module>
+        <module>spring-test-jpa</module>
     </modules>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.postgres.extension;
+package com.jupiter.tools.spring.test.jpa.extension;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.extension.Extension;
