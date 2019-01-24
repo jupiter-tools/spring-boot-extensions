@@ -1,5 +1,6 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
+import com.jupiter.tools.spring.test.jpa.tracesql.StatementInspectorImpl;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.extension.Extension;
 
@@ -12,7 +13,7 @@ public class TraceSqlExtension implements Extension {
 
     static {
         setUpDbConnectionSetting();
-
+        setUpCustomStatementInspector();
         setUpTraceProperties();
     }
 
@@ -22,6 +23,11 @@ public class TraceSqlExtension implements Extension {
         System.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
         System.setProperty("spring.jpa.show-sql", "true");
         System.setProperty("spring.jpa.properties.hibernate.hbm2ddl.auto", "create-drop");
+    }
+
+    private static void setUpCustomStatementInspector() {
+        System.setProperty("spring.jpa.properties.hibernate.session_factory.statement_inspector",
+                           StatementInspectorImpl.class.getCanonicalName());
     }
 
 
