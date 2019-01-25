@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.postgres.extension;
+package com.jupiter.tools.spring.test.postgres;
 
 
 import org.junit.jupiter.api.Test;

@@ -1,0 +1,8 @@
+{
+  "transactional_test_config$foo": [
+    {
+      "id": 1,
+      "field": "tru la la.."
+    }
+  ]
+}
