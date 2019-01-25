@@ -5,7 +5,6 @@ jdk:
 script:
  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.issue.ignore.multicriteria="e1" -Dsonar.issue.ignore.multicriteria.e1.ruleKey="squid:S00119" -Dsonar.issue.ignore.multicriteria.e1.resourceKey="**/*.java"
 
-
 after_success:
  - mvn cobertura:cobertura
  - bash <(curl -s https://codecov.io/bash)
