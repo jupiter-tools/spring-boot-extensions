@@ -7,6 +7,7 @@ import com.github.database.rider.core.api.exporter.ExportDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import com.jupiter.tools.spring.test.mysql.TransactionalTestConfig;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 25.01.2019.
@@ -46,8 +49,10 @@ class MySqlTcExtensionTest {
                                                            .build());
     }
 
+    @Disabled
     @Test
     @Commit
+    @DataSet(cleanBefore = true, cleanAfter = true)
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @ExportDataSet(outputName = "target/dataset/export.json", format = DataSetFormat.JSON)
     void generate() throws Exception {
@@ -57,4 +62,9 @@ class MySqlTcExtensionTest {
                                                    .build());
     }
 
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    void nativeJson() {
+        assertThat(repository.nativeJson()).isNotNull();
+    }
 }
