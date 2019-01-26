@@ -1,0 +1,59 @@
+:toc: preamble
+
+# JUnit5 Spring Boot Extensions
+
+image:https://travis-ci.com/jupiter-tools/spring-boot-extensions.svg?branch=master["Build Status", link="https://travis-ci.com/jupiter-tools/spring-boot-extensions"]
+image:https://codecov.io/gh/jupiter-tools/spring-boot-extensions/branch/master/graph/badge.svg[link ="https://codecov.io/gh/jupiter-tools/spring-boot-extensions"]
+
+## Database specific tests
+
+image:./images/JPAContainersMain.png[]
+
+### TraceSqlExtension
+
+Provide you an ability to check SQL statement execution after tests.
+
+For example, you can assert a count of insert operations after save an entity:
+
+[source, java]
+----
+@ExtendWith(TraceSqlExtension.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+class TraceSqlExtensionTest {
+
+    @Autowired
+    private FooRepository fooRepository;
+
+    @Test
+    void testInsert() {
+        // Act
+        fooRepository.save(new Foo("any data"));
+        // Assert
+        AssertSqlCount.assertInsertCount(1);
+    }
+}
+----
+
+### PostgresTcExtension
+
+To run the docker postgres image by the test-containers library
+in your integration test, you can use PostgresTcExtension:
+
+[source, java]
+----
+@EnablePostgresTestContainers
+....example....
+----
+
+### MySqlTcExtension
+
+MySqlTcExtension runs mysql docker images and set spring properties
+in the configuration to use this datasource in tests.
+
+You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation:
+
+[source, java]
+----
+....example....
+----
