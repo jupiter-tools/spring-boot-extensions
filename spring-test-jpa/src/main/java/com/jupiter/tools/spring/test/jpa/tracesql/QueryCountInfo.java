@@ -50,14 +50,4 @@ public class QueryCountInfo {
         callCount = 0;
         otherCount = 0;
     }
-
-    public int countAll() {
-
-        return selectCount +
-               insertCount +
-               updateCount +
-               deleteCount +
-               callCount +
-               otherCount;
-    }
 }
