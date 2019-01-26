@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.mysql;
+package com.jupiter.tools.spring.test.jpa.extension;
 
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class TransactionalTestConfig {
 
     @Repository
     public interface FooRepository extends JpaRepository<Foo, Long> {
-        @Query(value = "SELECT JSON_OBJECT('id', 87, 'name', 'prime')", nativeQuery = true)
-        String nativeJson();
+        @Query(value = "call RAND() *1000", nativeQuery = true)
+        long rand();
     }
 
     @Entity
