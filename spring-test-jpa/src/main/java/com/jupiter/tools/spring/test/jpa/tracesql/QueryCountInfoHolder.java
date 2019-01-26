@@ -14,8 +14,4 @@ public class QueryCountInfoHolder {
     public static QueryCountInfo getQueryInfo() {
         return QUERY_INFO_HOLDER.get();
     }
-
-    public static void clear() {
-        QUERY_INFO_HOLDER.get().clear();
-    }
 }

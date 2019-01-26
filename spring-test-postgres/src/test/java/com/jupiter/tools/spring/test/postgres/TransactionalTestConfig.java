@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Korovin Anatoliy
  */
+@SpringBootApplication
 @TestConfiguration
 @EnableJpaRepositories(considerNestedRepositories = true)
 @EntityScan(basePackageClasses = {TransactionalTestConfig.class})

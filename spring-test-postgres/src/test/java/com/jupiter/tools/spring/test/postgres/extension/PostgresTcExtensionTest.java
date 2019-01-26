@@ -24,8 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  *
  * @author Korovin Anatoliy
  */
-//@Disabled
-
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @ExtendWith(PostgresTcExtension.class)
