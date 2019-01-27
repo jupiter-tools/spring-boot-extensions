@@ -1,23 +1,20 @@
 package com.jupiter.tools.spring.test.rabbitmq.extension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import com.jupiter.tools.spring.test.rabbitmq.annotation.EnableRabbitMqTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -27,10 +24,8 @@ import static org.awaitility.Awaitility.await;
  *
  * @author Korovin Anatoliy
  */
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@ExtendWith(RabbitMqTcExtension.class)
-class RabbitMqTcExtensionTest {
+@EnableRabbitMqTest
+class EnableRabbitMqTestTest {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -39,7 +34,7 @@ class RabbitMqTcExtensionTest {
     void testSend() {
         // Arrange
         // Act
-        amqpTemplate.convertAndSend("test-queue", "123");
+        amqpTemplate.convertAndSend("second-test-queue", "123");
 
         await().atMost(3, TimeUnit.SECONDS)
                .until(() -> TestConfig.events.size() > 0);
@@ -60,19 +55,18 @@ class RabbitMqTcExtensionTest {
 
         @Bean
         public Queue testQueue() {
-            return new Queue("test-queue");
+            return new Queue("second-test-queue");
         }
 
         @Component
         @EnableRabbit
         public class TestRabbitListener {
 
-            @RabbitListener(queues = "test-queue")
+            @RabbitListener(queues = "second-test-queue")
             public void receive(String message) {
                 try {
                     Thread.sleep(1000);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 events.add(message);

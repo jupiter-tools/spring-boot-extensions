@@ -7,9 +7,9 @@ image:https://codecov.io/gh/jupiter-tools/spring-boot-extensions/branch/master/g
 
 ## Database specific tests
 
-image:./images/JPAContainersMain.png[]
+image:./images/jpa-containers.png[jpa containers extension scheme]
 
-### TraceSqlExtension
+### TraceSql Extension
 
 Provide you an ability to check SQL statement execution after tests.
 
@@ -35,25 +35,140 @@ class TraceSqlExtensionTest {
 }
 ----
 
-### PostgresTcExtension
+### PostgreSQL Extension
 
 To run the docker postgres image by the test-containers library
 in your integration test, you can use PostgresTcExtension:
 
 [source, java]
 ----
-@EnablePostgresTestContainers
-....example....
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@ExtendWith(PostgresTcExtension.class)
+@ExtendWith(TraceSqlExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PostgresTcExtensionTest {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Test
+    @Sql("/stored_functions/test_func.sql")
+    void testStoredFunc() {
+        // Arrange
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("rnd");
+        // Act
+        query.execute();
+        // Assert
+        List resultList = query.getResultList();
+        int rnd = (int) resultList.get(0);
+        Assertions.assertThat(rnd).isEqualTo(123);
+    }
+}
 ----
 
-### MySqlTcExtension
+This library provides a wide system of meta-annotations to
+simplified writing integration test's configuration.
 
-MySqlTcExtension runs mysql docker images and set spring properties
-in the configuration to use this datasource in tests.
-
-You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation:
+For example, you can write:
 
 [source, java]
 ----
-....example....
+@EnablePostgresDataTest
+class EnablePostgresDataTestTest {
+    ...
+}
 ----
+
+instead of:
+
+[source, java]
+----
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@ExtendWith(PostgresTcExtension.class)
+@ExtendWith(TraceSqlExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PostgresTcExtensionTest {
+    ...
+}
+----
+
+you can see at whole postgres annotation system at the next picture::
+
+image:./images/pg-annotations.png[postgres annotation system]
+
+You can build a necessary test configuration by using annotations which you need. Meta-annotations is a beautiful mechanism which will you a making configuration in a declarative style.
+
+
+### MySql Extension
+
+MySqlTcExtension runs the mysql docker image and set spring properties
+in the configuration to use this datasource in tests.
+
+You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation or
+you can use `@EnableMySqlDataTest` to write a test with the DataJpa context configuration:
+
+[source, java]
+----
+@EnableMySqlDataTest
+class EnableMySqlDataTestTest {
+
+    @Autowired
+    private FooRepository repository;
+
+    @Test
+    @Commit
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
+    void testCreate() throws Exception {
+        repository.saveAndFlush(new Foo("any data"));
+    }
+}
+----
+
+
+As well as for the PostgreSQL in this library there is a system of meta-annotations for the MySql:
+
+image:./images/mysql-annotations.png[mysql annotation system]
+
+
+## Messaging systems
+
+image:./images/rabbitmq-annotations.png[messaging system annotations]
+
+### RabbitMq Extension
+
+`RabbitMqTcExtension` runs the RabbitMq docker image by the TestContainers library
+and configure SpringBoot properties to work with this container.
+
+[source, java]
+----
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ExtendWith(RabbitMqTcExtension.class)
+class EnableRabbitMqTestTest {
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @Test
+    void testSend() {
+        amqpTemplate.convertAndSend("test-queue", "123");
+        ...
+
+    }
+}
+----
+
+As well as with database specific tests, in this case, you can use meta-annotation to write tests more pragmatic:
+
+[source, java]
+----
+@EnableRabbitMqTest
+class EnableRabbitMqTestTest {
+   ...
+}
+----
+
+
