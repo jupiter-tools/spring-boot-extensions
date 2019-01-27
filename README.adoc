@@ -7,7 +7,7 @@ image:https://codecov.io/gh/jupiter-tools/spring-boot-extensions/branch/master/g
 
 ## Database specific tests
 
-image:./images/JPAContainersMain.png[]
+image:./images/jpa-containers.png[jpa containers extension scheme]
 
 ### TraceSql Extension
 
