@@ -20,8 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 /**
  * Created on 23.01.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @DataJpaTest

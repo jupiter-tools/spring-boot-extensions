@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 /**
  * Created on 19.07.2018.
  *
- * Stereotype for the combination of:
+ * Meta-annotation for the combination of:
  * IntegrationTests, RiderTests and MySQL docker-container
  *
  * @author Korovin Anatoliy

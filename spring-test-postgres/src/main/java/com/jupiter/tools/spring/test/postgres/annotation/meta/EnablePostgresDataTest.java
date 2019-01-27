@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 /**
  * Created on 19.07.2018.
  *
- * Stereotype for the combination of: DataTests, RiderTests
+ * Meta-annotation for the combination of: DataTests, RiderTests
  * and PostgreSQL docker container.
  *
  * @author Korovin Anatoliy

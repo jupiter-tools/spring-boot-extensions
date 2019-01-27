@@ -21,8 +21,6 @@ import static org.awaitility.Awaitility.await;
 
 /**
  * Created on 23.01.2019.
- * <p>
- * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
  */
