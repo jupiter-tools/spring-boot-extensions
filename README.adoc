@@ -42,18 +42,88 @@ in your integration test, you can use PostgresTcExtension:
 
 [source, java]
 ----
-@EnablePostgresTestContainers
-....example....
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@ExtendWith(PostgresTcExtension.class)
+@ExtendWith(TraceSqlExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PostgresTcExtensionTest {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Test
+    @Sql("/stored_functions/test_func.sql")
+    void testStoredFunc() {
+        // Arrange
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("rnd");
+        // Act
+        query.execute();
+        // Assert
+        List resultList = query.getResultList();
+        int rnd = (int) resultList.get(0);
+        Assertions.assertThat(rnd).isEqualTo(123);
+    }
+}
 ----
+
+This library provides a wide system of meta-annotations to
+simplified writing integration test's configuration.
+
+You can write :
+
+[source, java]
+----
+@EnablePostgresDataTest
+class EnablePostgresDataTestTest {
+    ...
+}
+----
+
+instead of:
+
+[source, java]
+----
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
+@ExtendWith(PostgresTcExtension.class)
+@ExtendWith(TraceSqlExtension.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PostgresTcExtensionTest {
+    ...
+}
+----
+
+Postgres Annotation system:
+
+image:./images/meta-annotations.png[annotation system]
+
 
 ### MySqlTcExtension
 
 MySqlTcExtension runs mysql docker images and set spring properties
 in the configuration to use this datasource in tests.
 
-You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation:
+You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation or
+you can use `@EnableMySqlDataTest` to write a test with the DataJpa context configuration:
 
 [source, java]
 ----
-....example....
+@EnableMySqlDataTest
+class EnableMySqlDataTestTest {
+
+    @Autowired
+    private FooRepository repository;
+
+    @Test
+    @Commit
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
+    void testCreate() throws Exception {
+        repository.saveAndFlush(Foo.builder().field("any data").build());
+    }
+}
 ----
+
+
+
