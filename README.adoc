@@ -135,7 +135,7 @@ image:./images/mysql-annotations.png[mysql annotation system]
 
 ## Messaging systems
 
-image:./images/rabbitmq-annotations.png[messaging system annotations]
+image:./images/jms.png[messaging system annotations]
 
 ### RabbitMq Extension
 
@@ -171,4 +171,53 @@ class EnableRabbitMqTestTest {
 }
 ----
 
+Also, you can assert the sending of messages in the selected queue:
 
+[source, java]
+----
+@EnableRabbitMqTest
+public class ExpectedMessageTest {
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @Test
+    @ExpectedMessage(queue = "test-queue", message = "123")
+    void testSend() throws InterruptedException {
+        amqpTemplate.convertAndSend("test-queue", "123");
+    }
+}
+----
+
+### ActiveMq Extension
+
+You can run the ActiveMq docker image by the using of `EnableActiveMqTestContainers` annotation.
+
+image:./images/activemq-annotations.png[activemq annotations]
+
+If you need to check a sending of messages then you can use the `ExpectedMessage` annotation:
+
+[source, java]
+----
+@SpringBootTest
+@EnableActiveMqTest
+public class SendMessageTest {
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Test
+    @ExpectedMessage(queue = "test-queue", message = "123")
+    void testSend() {
+        jmsTemplate.convertAndSend("test-queue", "123");
+    }
+
+    @TestConfiguration
+    public static class TestConfig {
+        @Bean
+        public Queue testQueue() {
+            return new Queue("test-queue");
+        }
+    }
+}
+----
