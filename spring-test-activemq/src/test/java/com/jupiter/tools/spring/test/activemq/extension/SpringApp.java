@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Created on 28.01.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @SpringBootApplication

@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created on 22.01.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 public class RabbitMqMessageExtension implements BeforeAllCallback, AfterEachCallback {
