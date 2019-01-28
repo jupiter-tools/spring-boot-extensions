@@ -103,11 +103,6 @@ class TraceSqlExtensionTest {
         fooRepository.findAll();
         fooRepository.deleteAll();
         fooRepository.rand();
-        AssertSqlCount.assertDeleteCount(1);
-        AssertSqlCount.assertUpdateCount(1);
-        AssertSqlCount.assertSelectCount(4);
-        AssertSqlCount.assertInsertCount(1);
-        AssertSqlCount.assertCallCount(2);
         // Act
         AssertSqlCount.reset();
         // Asserts

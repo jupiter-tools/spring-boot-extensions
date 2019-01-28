@@ -1,5 +1,7 @@
-package com.jupiter.tools.spring.test.rabbitmq.annotation;
+package com.jupiter.tools.spring.test.rabbitmq.annotation.meta;
 
+import com.jupiter.tools.spring.test.rabbitmq.annotation.EnableRabbitMqTestContainers;
+import com.jupiter.tools.spring.test.rabbitmq.extension.RabbitMqMessageExtension;
 import com.jupiter.tools.spring.test.rabbitmq.extension.RabbitMqTcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ExtendWith(RabbitMqTcExtension.class)
+@EnableRabbitMqTestContainers
+@ExtendWith(RabbitMqMessageExtension.class)
 public @interface EnableRabbitMqTest {
 }
