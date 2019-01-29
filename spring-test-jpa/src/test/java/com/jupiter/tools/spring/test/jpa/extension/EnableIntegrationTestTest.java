@@ -1,6 +1,6 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
-import com.jupiter.tools.spring.test.jpa.annotation.EnableIntegrationTest;
+import com.jupiter.tools.spring.test.core.annotation.EnableIntegrationTest;
 import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.postgres.annotation.meta;
 
-import com.jupiter.tools.spring.test.jpa.annotation.EnableIntegrationTest;
+
+import com.jupiter.tools.spring.test.core.annotation.EnableIntegrationTest;
 import com.jupiter.tools.spring.test.jpa.annotation.EnableRiderTest;
 import com.jupiter.tools.spring.test.postgres.annotation.EnablePostgresTestContainers;
 
