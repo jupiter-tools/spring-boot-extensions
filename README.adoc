@@ -221,3 +221,57 @@ public class SendMessageTest {
     }
 }
 ----
+
+## Embedded Web Server
+
+Let's consider the next microservice based application:
+
+image:./images/embedded-web.png[embedded web services tests]
+
+You can test inter-service communication by the running an embedded
+web server with a mocked external controller and send HTTP requests to this server.
+
+
+[source, java]
+----
+@EnableEmbeddedWebServerTest
+class TempalteServiceTest {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${server.port}")
+    private String port;
+
+    @Test
+    void invokeEmbeddedWebServer() {
+        // Arrange
+        TemplateService templateService =
+            new TemplateService(restTemplate, "http://localhost:" + port + "/templates/make");
+        // Act
+        String test = templateService.make();
+        // Assert
+        assertThat(test).isEqualTo("${default_template}");
+    }
+
+    @TestConfiguration
+    public static class TestConfig {
+
+        @RestController
+        @RequestMapping("templates")
+        public class TemplateController {
+
+            @GetMapping("/make")
+            public String test() {
+                return "${default_template}";
+            }
+        }
+    }
+}
+----
+
+If you want to run different web servers in one test suite
+then you need to use a different port to each server.
+And you need to be sure that selected port is available.
+
+Annotation `EnableEmbeddedWebServerTest` bind a random available TCP port to the server.port property of the Spring Framework.

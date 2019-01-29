@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.jupiter.tools.spring.test.core.annotation.EnableIntegrationTest;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,9 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@ExtendWith(SpringExtension.class)
-//TODO: remove EnableIntegrationTest in common module
-@SpringBootTest
+@EnableIntegrationTest
 @AutoConfigureMockMvc
 public @interface EnableRestTest {
 }

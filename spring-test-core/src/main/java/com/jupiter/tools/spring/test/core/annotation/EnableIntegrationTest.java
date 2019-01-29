@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.jpa.annotation;
+package com.jupiter.tools.spring.test.core.annotation;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;

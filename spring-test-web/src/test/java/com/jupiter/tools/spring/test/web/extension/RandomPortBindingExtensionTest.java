@@ -17,8 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created on 29.01.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @EnableEmbeddedWebServerTest
@@ -50,7 +48,7 @@ class RandomPortBindingExtensionTest {
 
         @RestController
         @RequestMapping("api")
-        public class AController {
+        public class TestController {
 
             @GetMapping("test")
             public String test() {

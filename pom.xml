@@ -73,6 +73,7 @@
     </parent>
 
     <modules>
+        <module>spring-test-core</module>
         <module>spring-test-rabbitmq</module>
         <module>spring-test-activemq</module>
         <module>spring-test-jpa</module>
