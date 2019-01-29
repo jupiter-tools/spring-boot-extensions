@@ -78,6 +78,7 @@
         <module>spring-test-jpa</module>
         <module>spring-test-mysql</module>
         <module>spring-test-postgres</module>
+        <module>spring-test-web</module>
     </modules>
 
     <dependencies>
