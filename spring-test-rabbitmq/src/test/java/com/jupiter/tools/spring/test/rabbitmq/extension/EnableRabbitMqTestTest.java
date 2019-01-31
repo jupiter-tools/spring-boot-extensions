@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +46,6 @@ class EnableRabbitMqTestTest {
     public static class TestConfig {
 
         public static List<String> events = new ArrayList<>();
-
-        @Bean
-        public RestTemplate restTemplate() {
-            return new RestTemplate();
-        }
 
         @Bean
         public Queue testQueue() {

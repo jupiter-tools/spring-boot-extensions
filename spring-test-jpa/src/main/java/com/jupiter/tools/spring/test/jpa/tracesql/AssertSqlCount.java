@@ -1,7 +1,8 @@
 package com.jupiter.tools.spring.test.jpa.tracesql;
 
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.jupiter.tools.spring.test.jpa.tracesql.QueryCountInfoHolder.getQueryInfo;
 
@@ -9,8 +10,9 @@ import static com.jupiter.tools.spring.test.jpa.tracesql.QueryCountInfoHolder.ge
 /**
  * Created by Igor Dmitriev / Mikalai Alimenkou on 12/6/15
  */
-@Slf4j
 public class AssertSqlCount {
+
+    private static Logger log = LoggerFactory.getLogger(AssertSqlCount.class);
 
     public static void reset() {
         log.debug("assertSql.reset()");

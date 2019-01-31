@@ -49,7 +49,7 @@ class MySqlTcExtensionTest {
                                                            .build());
     }
 
-    @Disabled
+//    @Disabled
     @Test
     @Commit
     @DataSet(cleanBefore = true, cleanAfter = true)

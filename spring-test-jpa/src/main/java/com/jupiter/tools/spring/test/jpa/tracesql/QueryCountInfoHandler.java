@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.jpa.tracesql;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created on 12/6/15
@@ -9,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
  * @author Mikalai Alimenkou
  * @author Korovin Anatoliy
  */
-@Slf4j
 public class QueryCountInfoHandler implements QueryHandler {
+
+    private static Logger log = LoggerFactory.getLogger(QueryCountInfoHandler.class);
+
     @Override
     public void handleSql(String sql) {
         QueryType queryType = getQueryType(sql);
