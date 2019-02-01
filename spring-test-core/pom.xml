@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>junit5-extensions-parent</artifactId>
-        <version>0.1</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-test-core</artifactId>

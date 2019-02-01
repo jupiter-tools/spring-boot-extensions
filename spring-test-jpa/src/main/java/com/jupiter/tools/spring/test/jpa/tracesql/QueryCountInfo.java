@@ -1,7 +1,5 @@
 package com.jupiter.tools.spring.test.jpa.tracesql;
 
-import lombok.Getter;
-
 /**
  * Created on 12/6/15
  *
@@ -9,7 +7,6 @@ import lombok.Getter;
  * @author Mikalai Alimenkou
  * @author Korovin Anatoliy
  */
-@Getter
 public class QueryCountInfo {
     private int selectCount;
     private int insertCount;
@@ -49,5 +46,29 @@ public class QueryCountInfo {
         deleteCount = 0;
         callCount = 0;
         otherCount = 0;
+    }
+
+    public int getSelectCount() {
+        return selectCount;
+    }
+
+    public int getInsertCount() {
+        return insertCount;
+    }
+
+    public int getUpdateCount() {
+        return updateCount;
+    }
+
+    public int getDeleteCount() {
+        return deleteCount;
+    }
+
+    public int getCallCount() {
+        return callCount;
+    }
+
+    public int getOtherCount() {
+        return otherCount;
     }
 }
