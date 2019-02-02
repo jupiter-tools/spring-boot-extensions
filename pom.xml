@@ -4,23 +4,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jupiter-tools</groupId>
-    <artifactId>junit5-extensions-parent</artifactId>
+    <artifactId>spring-boot-extensions-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>junit5-extensions</name>
+    <name>spring-boot-extensions-parent</name>
     <description>JUnit5 Extensions Suite</description>
 
-    <url>https://github.com/jupiter-tools/junit5-extensions</url>         
+    <url>https://github.com/jupiter-tools/spring-boot-extensions</url>
     <scm>
-        <url>https://github.com/jupiter-tools/junit5-extensions</url>
-        <connection>scm:git:git://github.com/jupiter-tools/junit5-extensions.git</connection>                                
-        <developerConnection>scm:git:ssh://git@github.com/jupiter-tools/junit5-extensions.git</developerConnection>
+        <url>https://github.com/jupiter-tools/spring-boot-extensions</url>
+        <connection>scm:git:git://github.com/jupiter-tools/spring-boot-extensions.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jupiter-tools/spring-boot-extensions.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/jupiter-tools/junit5-extensions/issues</url>             
+        <url>https://github.com/jupiter-tools/spring-boot-extensions/issues</url>
     </issueManagement>
 
     <licenses>
