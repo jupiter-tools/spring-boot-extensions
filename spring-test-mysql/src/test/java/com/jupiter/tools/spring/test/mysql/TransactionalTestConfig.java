@@ -17,6 +17,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created on 12.07.2018.
@@ -38,6 +39,7 @@ public class TransactionalTestConfig {
         String nativeJson();
     }
 
+    @Table(name = "foo")
     @Entity
     @Setter
     @Getter

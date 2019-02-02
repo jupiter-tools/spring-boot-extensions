@@ -1,5 +1,5 @@
 {
-  "transactional_test_config$foo": [
+  "foo": [
     {
       "id": 1,
       "field": "tru la la.."
