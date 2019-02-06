@@ -234,44 +234,52 @@ web server with a mocked external controller and send HTTP requests to this serv
 
 [source, java]
 ----
-@EnableEmbeddedWebServerTest
-class TempalteServiceTest {
+@EnableEmbeddedWebServerTest <1>
+@RedirectRibbonToEmbeddedWebServer("template-service")  <2>
+class RedirectRibbonExtensionTest {
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${server.port}")
-    private String port;
-
     @Test
-    void invokeEmbeddedWebServer() {
-        // Arrange
-        TemplateService templateService =
-            new TemplateService(restTemplate, "http://localhost:" + port + "/templates/make");
+    void testRedirect() {
         // Act
-        String test = templateService.make();
+        String result = restTemplate.getForObject("http://template-service/templates/{template}",
+                                                String.class,
+                                                "balance-template");
         // Assert
-        assertThat(test).isEqualTo("${default_template}");
+        assertThat(result).isEqualTo("{user} balance = {value}");
     }
 
     @TestConfiguration
-    public static class TestConfig {
+    public static class TestCfg {
+
+        @Bean
+        @LoadBalanced
+        public RestTemplate restTemplate() {
+            return new RestTemplate();
+        }
 
         @RestController
-        @RequestMapping("templates")
-        public class TemplateController {
+        @RequestMapping("/templates")
+        public class TestApi {
 
-            @GetMapping("/make")
-            public String test() {
-                return "${default_template}";
+            @GetMapping("/{template}")
+            public String getLength(@PathVariable("template") String template) {
+                return "{user} balance = {value}";
             }
         }
     }
-}
+ }
 ----
+<1> bind the embedded server to an available TCP-port
+<2> resolve the client name("template-service") to an embedded server url
 
 If you want to run different web servers in one test suite
 then you need to use a different port to each server.
 And you need to be sure that selected port is available.
 
 Annotation `EnableEmbeddedWebServerTest` bind a random available TCP port to the server.port property of the Spring Framework.
+
+`RedirectRibbonToEmbeddedWebServer` redirects all requests from any ribbon
+clients to embedded server, by default (if you don't set the value of this annotation).
