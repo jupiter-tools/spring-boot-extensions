@@ -1,0 +1,13 @@
+{
+  "com.jupiter.tools.spring.test.activemq.extension.Foo": [
+    {
+      "value":"123"
+    },
+    {
+      "value":"456"
+    },
+    {
+      "value":"789"
+    }
+  ]
+}
