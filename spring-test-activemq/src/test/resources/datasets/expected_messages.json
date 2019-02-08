@@ -1,5 +1,5 @@
 {
-  "com.jupiter.tools.spring.test.activemq.extension.Foo": [
+  "com.jupiter.tools.spring.test.activemq.extension.expected.Foo": [
     {
       "value":"123"
     },

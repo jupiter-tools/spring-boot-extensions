@@ -1,7 +1,8 @@
-package com.jupiter.tools.spring.test.activemq.extension;
+package com.jupiter.tools.spring.test.activemq.extension.expected;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.activemq.annotation.meta.EnableActiveMqTest;
+import com.jupiter.tools.spring.test.activemq.extension.ExpectedMessagesExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -31,6 +32,26 @@ public class ExpectedListOfMessagesTest {
     @Test
     @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json")
     void testSend() {
+        jmsTemplate.convertAndSend("test-queue", new Foo("123"));
+        jmsTemplate.convertAndSend("test-queue", new Foo("456"));
+        jmsTemplate.convertAndSend("test-queue", new Foo("789"));
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_multiple_types.json")
+    void sendMultipleTypes() {
+        // first type:
+        jmsTemplate.convertAndSend("test-queue", new Foo("123"));
+        // second type:
+        jmsTemplate.convertAndSend("test-queue", new Bar("AAA",1));
+        jmsTemplate.convertAndSend("test-queue", new Bar("BBB",2));
+        jmsTemplate.convertAndSend("test-queue", new Bar("CCC",3));
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json", ignoreUnexpected = true)
+    void testIgnoreUnexpected() {
+        jmsTemplate.convertAndSend("test-queue", new Foo("UNEXPECTED"));
         jmsTemplate.convertAndSend("test-queue", new Foo("123"));
         jmsTemplate.convertAndSend("test-queue", new Foo("456"));
         jmsTemplate.convertAndSend("test-queue", new Foo("789"));

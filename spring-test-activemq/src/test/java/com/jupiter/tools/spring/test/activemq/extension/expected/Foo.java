@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.activemq.extension;
+package com.jupiter.tools.spring.test.activemq.extension.expected;
 
 import java.io.Serializable;
 
@@ -9,6 +9,7 @@ import java.io.Serializable;
  *
  * @author Korovin Anatoliy
  */
+
 public class Foo implements Serializable {
 
     private String value;

@@ -52,12 +52,20 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
             String className = obj.getClass().getCanonicalName();
 
             if (!expected.containsKey(className)) {
+                if (expectedMessages.ignoreUnexpected()) {
+                    continue;
+                }
                 Assertions.fail("not expected but found: \n" + mapper.writeValueAsString(obj));
             }
 
             Map<String, Object> map = mapper.convertValue(obj, Map.class);
             if (!expected.get(className).contains(map)) {
-                Assertions.fail("not expected but found: \n" + mapper.writeValueAsString(obj));
+                if (expectedMessages.ignoreUnexpected()) {
+                    continue;
+                }
+                Assertions.fail("not expected but found: \n" +
+                                "`" + className + "` :\n" +
+                                mapper.writeValueAsString(obj));
             }
 
             expected.get(className).remove(map);
