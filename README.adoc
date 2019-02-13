@@ -11,9 +11,20 @@ image:./images/jpa-containers.png[jpa containers extension scheme]
 
 ### TraceSql Extension
 
-Provide you an ability to check SQL statement execution after tests.
 
-For example, you can assert a count of insert operations after save an entity:
+Provide you an ability to check SQL statement execution after tests.
+You need to add the next dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-jpa</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
+And now, you can assert a count of insert operations after save an entity:
 
 [source, java]
 ----
@@ -38,7 +49,18 @@ class TraceSqlExtensionTest {
 ### PostgreSQL Extension
 
 To run the docker postgres image by the test-containers library
-in your integration test, you can use PostgresTcExtension:
+in your integration test, you can use PostgresTcExtension.
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-postgres</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
+Let's try to execute a stored procedure specific to PostgreSQL:
 
 [source, java]
 ----
@@ -106,6 +128,15 @@ You can build a necessary test configuration by using annotations which you need
 MySqlTcExtension runs the mysql docker image and set spring properties
 in the configuration to use this datasource in tests.
 
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-mysql</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
 You can use this extension by the applying of `EnableMySqlTestContainersExtension` annotation or
 you can use `@EnableMySqlDataTest` to write a test with the DataJpa context configuration:
 
@@ -141,6 +172,17 @@ image:./images/jms.png[messaging system annotations]
 
 `RabbitMqTcExtension` runs the RabbitMq docker image by the TestContainers library
 and configure SpringBoot properties to work with this container.
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-rabbitmq</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
+Now we can run RabbitMq in tests and send a message in a real queue:
 
 [source, java]
 ----
@@ -193,6 +235,17 @@ public class ExpectedMessageTest {
 
 You can run the ActiveMq docker image by the using of `EnableActiveMqTestContainers` annotation.
 
+You need to use the next dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-activemq</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
 image:./images/activemq-annotations.png[activemq annotations]
 
 If you need to check a sending of messages then you can use the `ExpectedMessage` annotation:
@@ -231,6 +284,16 @@ image:./images/embedded-web.png[embedded web services tests]
 You can test inter-service communication by the running an embedded
 web server with a mocked external controller and send HTTP requests to this server.
 
+[source,xml]
+----
+<dependency>
+    <groupId>com.jupiter-tools</groupId>
+    <artifactId>spring-test-web</artifactId>
+    <version>0.1</version>
+</dependency>
+----
+
+Let's test requesting to the template-service by the using of embedded server:
 
 [source, java]
 ----
@@ -283,3 +346,8 @@ Annotation `EnableEmbeddedWebServerTest` bind a random available TCP port to the
 
 `RedirectRibbonToEmbeddedWebServer` redirects all requests from any ribbon
 clients to embedded server, by default (if you don't set the value of this annotation).
+
+
+## Examples
+
+https://github.com/jupiter-tools/spring-boot-extensions-demo
