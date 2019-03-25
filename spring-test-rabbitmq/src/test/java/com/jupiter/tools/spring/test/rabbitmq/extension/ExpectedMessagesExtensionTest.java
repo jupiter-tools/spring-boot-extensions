@@ -19,14 +19,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 /**
  * Created on 25.03.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @EnableRabbitMqTestContainers
-@ExtendWith(RabbitMqMessageExtension.class)
 @ExtendWith(ExpectedMessagesExtension.class)
 class ExpectedMessagesExtensionTest {
 
