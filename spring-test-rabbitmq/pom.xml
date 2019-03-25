@@ -32,6 +32,14 @@
         </dependency>
         <!-- RabbitMQ -->
 
+        <!-- import DataSets -->
+        <dependency>
+            <groupId>com.jupiter-tools</groupId>
+            <artifactId>spring-test-core</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- import DataSets -->
+
         <!-- TestContainers -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -48,6 +56,15 @@
             <version>3.1.0</version>
         </dependency>
         <!-- Awaitility -->
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Lombok -->
+
     </dependencies>
 
     <build>

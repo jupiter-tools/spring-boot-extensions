@@ -1,18 +1,18 @@
-package com.jupiter.tools.spring.test.activemq.extension;
+package com.jupiter.tools.spring.test.rabbitmq.extension;
 
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.core.importdata.ImportFile;
 import com.jupiter.tools.spring.test.core.importdata.JsonImport;
+import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.springframework.jms.core.JmsTemplate;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -25,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCallback {
 
-    private JmsTemplate jmsTemplate;
+    private AmqpTemplate amqpTemplate;
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
@@ -39,13 +39,12 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
 
         Map<String, List<Map<String, Object>>> expected = new JsonImport(new ImportFile(expectedMessages.messagesFile())).read();
 
-        jmsTemplate.setReceiveTimeout(expectedMessages.timeout());
         ObjectMapper mapper = new ObjectMapper();
 
         long startTime = System.currentTimeMillis();
         boolean processing = true;
         while (processing) {
-            Object obj = jmsTemplate.receiveAndConvert(expectedMessages.queue());
+            Object obj = amqpTemplate.receiveAndConvert(expectedMessages.queue(), expectedMessages.timeout());
             if (obj == null) {
                 Assertions.fail("expected but not found: \n" + mapper.writeValueAsString(expected));
             }
@@ -102,10 +101,10 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        jmsTemplate = SpringExtension.getApplicationContext(context)
-                                     .getBean(JmsTemplate.class);
+        amqpTemplate = SpringExtension.getApplicationContext(context)
+                                      .getBean(AmqpTemplate.class);
 
-        if (jmsTemplate == null) {
+        if (amqpTemplate == null) {
             throw new RuntimeException("Not found the JmsTemplate bean in the current spring context.");
         }
     }
