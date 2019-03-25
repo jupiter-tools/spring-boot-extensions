@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
-import com.jupiter.tools.spring.test.activemq.importdata.ImportFile;
-import com.jupiter.tools.spring.test.activemq.importdata.JsonImport;
+import com.jupiter.tools.spring.test.core.importdata.ImportFile;
+import com.jupiter.tools.spring.test.core.importdata.JsonImport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -18,7 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 /**
  * Created on 07.02.2019.
  *
- * TODO: replace on javadoc
+ * This extension provides an ability to assert sent messages after test execution.
+ * You can declare a list of expected messages in JSON format.
  *
  * @author Korovin Anatoliy
  */

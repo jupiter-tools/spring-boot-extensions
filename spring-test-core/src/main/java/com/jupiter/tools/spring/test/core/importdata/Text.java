@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.activemq.importdata;
+package com.jupiter.tools.spring.test.core.importdata;
 
 
 /**
