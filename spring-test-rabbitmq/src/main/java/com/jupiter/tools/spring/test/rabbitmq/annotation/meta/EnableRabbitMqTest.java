@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.rabbitmq.annotation.meta;
 
 import com.jupiter.tools.spring.test.rabbitmq.annotation.EnableRabbitMqTestContainers;
+import com.jupiter.tools.spring.test.rabbitmq.extension.ExpectedMessagesExtension;
 import com.jupiter.tools.spring.test.rabbitmq.extension.RabbitMqMessageExtension;
 import com.jupiter.tools.spring.test.rabbitmq.extension.RabbitMqTcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,5 +24,6 @@ import java.lang.annotation.Target;
 @ExtendWith(SpringExtension.class)
 @EnableRabbitMqTestContainers
 @ExtendWith(RabbitMqMessageExtension.class)
+@ExtendWith(ExpectedMessagesExtension.class)
 public @interface EnableRabbitMqTest {
 }
