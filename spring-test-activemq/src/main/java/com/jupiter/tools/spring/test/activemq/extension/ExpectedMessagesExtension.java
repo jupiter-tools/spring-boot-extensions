@@ -3,6 +3,7 @@ package com.jupiter.tools.spring.test.activemq.extension;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.core.importdata.ImportFile;
@@ -26,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCallback {
 
     private JmsTemplate jmsTemplate;
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
@@ -37,44 +39,87 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
             return;
         }
 
-        Map<String, List<Map<String, Object>>> expected = new JsonImport(new ImportFile(expectedMessages.messagesFile())).read();
+        Map<String, List<Map<String, Object>>> expected =
+                new JsonImport(
+                        new ImportFile(expectedMessages.messagesFile())
+                ).read();
+
+        if (isEmptyDataSet(expected)) {
+            processingEmptyDataSet(expectedMessages);
+            return;
+        }
+
+        processingDataSet(expectedMessages, expected);
+    }
+
+    private void processingDataSet(ExpectedMessages expectedMessages,
+                                   Map<String, List<Map<String, Object>>> expectedDataSet
+                                  ) throws JsonProcessingException {
 
         jmsTemplate.setReceiveTimeout(expectedMessages.timeout());
-        ObjectMapper mapper = new ObjectMapper();
-
         long startTime = System.currentTimeMillis();
         boolean processing = true;
+
         while (processing) {
-            Object obj = jmsTemplate.receiveAndConvert(expectedMessages.queue());
-            if (obj == null) {
-                Assertions.fail("expected but not found: \n" + mapper.writeValueAsString(expected));
+
+            Object message = jmsTemplate.receiveAndConvert(expectedMessages.queue());
+            if (message == null) {
+                Assertions.fail("expected but not found: \n" + mapper.writeValueAsString(expectedDataSet));
             }
 
-            String className = obj.getClass().getCanonicalName();
+            assertReceivedMessage(expectedMessages, expectedDataSet, message);
 
-            if (!expected.containsKey(className)) {
-                if (expectedMessages.ignoreUnexpected()) {
-                    continue;
-                }
-                Assertions.fail("not expected but found: \n" + mapper.writeValueAsString(obj));
-            }
-
-            Map<String, Object> map = mapper.convertValue(obj, Map.class);
-            if (!expected.get(className).contains(map)) {
-                if (expectedMessages.ignoreUnexpected()) {
-                    continue;
-                }
-                Assertions.fail("not expected but found: \n" +
-                                "`" + className + "` :\n" +
-                                mapper.writeValueAsString(obj));
-            }
-
-            removeEntryFromExpected(expected, className, map);
-
-            if (dataSetIsEmpty(expected) || timeLimit(startTime, expectedMessages.timeout())) {
+            if (dataSetIsEmpty(expectedDataSet) || timeLimit(startTime, expectedMessages.timeout())) {
                 processing = false;
             }
         }
+    }
+
+    private void assertReceivedMessage(ExpectedMessages expectedMessages,
+                                       Map<String, List<Map<String, Object>>> expectedDataSet,
+                                       Object message) throws JsonProcessingException {
+
+        String className = message.getClass().getCanonicalName();
+
+        if (!expectedDataSet.containsKey(className)) {
+            if (expectedMessages.ignoreUnexpected()) {
+                return;
+            }
+            Assertions.fail("not expected but found: \n" + mapper.writeValueAsString(message));
+        }
+
+        Map<String, Object> map = mapper.convertValue(message, Map.class);
+        if (!expectedDataSet.get(className).contains(map)) {
+            if (expectedMessages.ignoreUnexpected()) {
+                return;
+            }
+            Assertions.fail("not expected but found: \n" +
+                            "`" + className + "` :\n" +
+                            mapper.writeValueAsString(message));
+        }
+
+        removeEntryFromExpected(expectedDataSet, className, map);
+    }
+
+    private void processingEmptyDataSet(ExpectedMessages expectedMessages) throws JsonProcessingException {
+
+        if (expectedMessages.ignoreUnexpected()) {
+            return;
+        }
+
+        jmsTemplate.setReceiveTimeout(expectedMessages.timeout());
+
+        Object obj = jmsTemplate.receiveAndConvert(expectedMessages.queue());
+        if (obj != null) {
+            Assertions.fail("not expected but found: \n" + mapper.writeValueAsString(obj));
+        }
+    }
+
+
+    private boolean isEmptyDataSet(Map<String, List<Map<String, Object>>> dataset) {
+        return dataset.isEmpty() || dataset.entrySet()
+                                           .stream()
+                                           .allMatch(e -> e.getValue().isEmpty());
     }
 
     /**
@@ -83,9 +128,9 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
      */
     private void removeEntryFromExpected(Map<String, List<Map<String, Object>>> source,
                                          String entryClassName,
-                                         Map<String, Object> entry){
+                                         Map<String, Object> entry) {
         source.get(entryClassName).remove(entry);
-        if(source.get(entryClassName).isEmpty()){
+        if (source.get(entryClassName).isEmpty()) {
             source.remove(entryClassName);
         }
     }
