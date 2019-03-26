@@ -29,7 +29,7 @@ public @interface ExpectedMessages {
     /**
      * The timeout for wait messages after the test execution
      */
-    int timeout() default 3000;
+    int timeout() default 60000;
 
     /**
      * The path to the JSON file with expected messages
