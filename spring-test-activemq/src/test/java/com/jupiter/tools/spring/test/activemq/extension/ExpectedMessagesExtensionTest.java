@@ -35,7 +35,6 @@ class ExpectedMessagesExtensionTest {
         //NOP
     }
 
-
     @Test
     @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_empty_file.json")
     void testEmptyFile() {
