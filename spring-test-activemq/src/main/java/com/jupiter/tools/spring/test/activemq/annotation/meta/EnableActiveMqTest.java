@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 import com.jupiter.tools.spring.test.activemq.annotation.EnableActiveMqTestContainers;
 import com.jupiter.tools.spring.test.activemq.extension.ActiveMqMessageExtension;
-import com.jupiter.tools.spring.test.activemq.extension.ActiveMqTcExtension;
-import com.jupiter.tools.spring.test.activemq.extension.ExpectedMessagesExtension;
+import com.jupiter.tools.spring.test.activemq.extension.expected.list.messages.ActiveMqExpectedListOfMessagesExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @EnableActiveMqTestContainers
 @ExtendWith(ActiveMqMessageExtension.class)
-@ExtendWith(ExpectedMessagesExtension.class)
+@ExtendWith(ActiveMqExpectedListOfMessagesExtension.class)
 public @interface EnableActiveMqTest {
 }

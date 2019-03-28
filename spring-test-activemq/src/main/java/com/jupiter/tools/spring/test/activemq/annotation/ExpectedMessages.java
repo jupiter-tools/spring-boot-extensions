@@ -5,9 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.jupiter.tools.spring.test.activemq.extension.ExpectedMessagesExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 /**
  * Created on 22.01.2019.
  *
@@ -27,9 +24,9 @@ public @interface ExpectedMessages {
     String queue();
 
     /**
-     * The timeout for wait messages after the test execution
+     * The timeout for wait messages after the test execution (10 sec. by default)
      */
-    int timeout() default 60000;
+    int timeout() default 10000;
 
     /**
      * The path to the JSON file with expected messages

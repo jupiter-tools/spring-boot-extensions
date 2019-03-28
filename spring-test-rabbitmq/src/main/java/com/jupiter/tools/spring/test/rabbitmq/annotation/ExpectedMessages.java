@@ -24,9 +24,9 @@ public @interface ExpectedMessages {
     String queue();
 
     /**
-     * The timeout for wait messages after the test execution
+     * The timeout for wait messages after the test execution (10 sec. by default)
      */
-    int timeout() default 60000;
+    int timeout() default 10000;
 
     /**
      * The path to the JSON file with expected messages

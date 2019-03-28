@@ -1,10 +1,9 @@
-package com.jupiter.tools.spring.test.activemq.extension.expectedmess;
+package com.jupiter.tools.spring.test.core.expected.list.messages;
 
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.core.importdata.DataSet;
 import com.jupiter.tools.spring.test.core.importdata.ImportFile;
 import com.jupiter.tools.spring.test.core.importdata.JsonImport;
@@ -12,19 +11,20 @@ import com.jupiter.tools.spring.test.core.importdata.JsonImport;
 /**
  * Created on 27.03.2019.
  *
- * TODO: replace on javadoc
+ * Compare an expected data set with received from broker messages,
+ * trying to receive messages from the broker and will wait until timeout reached.
  *
  * @author Korovin Anatoliy
  */
 public class AssertReceivedMessages {
 
-    private final ExpectedMessages expectedMessages;
+    private final ExpectedMessagesOptions expectedMessagesOptions;
     private final MessageBroker messageBroker;
     private final ObjectMapper mapper;
 
-    public AssertReceivedMessages(ExpectedMessages expectedMessages,
+    public AssertReceivedMessages(ExpectedMessagesOptions expectedMessagesOptions,
                                   MessageBroker messageBroker) {
-        this.expectedMessages = expectedMessages;
+        this.expectedMessagesOptions = expectedMessagesOptions;
         this.messageBroker = messageBroker;
         this.mapper = new ObjectMapper();
     }
@@ -35,18 +35,18 @@ public class AssertReceivedMessages {
      */
     public void doAssert() {
 
-        if (expectedMessages == null) {
+        if (expectedMessagesOptions == null) {
             return;
         }
 
-        DataSet expectedDataSet = new JsonImport(new ImportFile(expectedMessages.messagesFile()));
+        DataSet expectedDataSet = new JsonImport(new ImportFile(expectedMessagesOptions.getMessagesFile()));
 
         if (isEmptyDataSet(expectedDataSet)) {
-            processingEmptyDataSet(expectedMessages);
+            processingEmptyDataSet(expectedMessagesOptions);
             return;
         }
 
-        processingDataSet(expectedMessages, expectedDataSet);
+        processingDataSet(expectedMessagesOptions, expectedDataSet);
     }
 
     private boolean isEmptyDataSet(DataSet dataSet) {
@@ -56,21 +56,21 @@ public class AssertReceivedMessages {
                                                    .allMatch(e -> e.getValue().isEmpty());
     }
 
-    private void processingEmptyDataSet(ExpectedMessages expectedMessages) {
+    private void processingEmptyDataSet(ExpectedMessagesOptions expectedMessagesOptions) {
 
-        if (expectedMessages.ignoreUnexpected()) {
+        if (expectedMessagesOptions.isIgnoreUnexpected()) {
             return;
         }
 
-        Object message = messageBroker.receive(expectedMessages.queue(),
-                                               expectedMessages.timeout());
+        Object message = messageBroker.receive(expectedMessagesOptions.getQueue(),
+                                               expectedMessagesOptions.getTimeout());
 
         if (message != null) {
             new Fail("not expected but found:").withObject(message).fire();
         }
     }
 
-    private void processingDataSet(ExpectedMessages expectedMessages,
+    private void processingDataSet(ExpectedMessagesOptions expectedMessagesOptions,
                                    DataSet expectedDataSet) {
 
         Map<String, List<Map<String, Object>>> expectedDataMap = expectedDataSet.read();
@@ -78,28 +78,29 @@ public class AssertReceivedMessages {
         boolean processing = true;
         while (processing) {
 
-            Object message = messageBroker.receive(expectedMessages.queue(), expectedMessages.timeout());
+            Object message = messageBroker.receive(expectedMessagesOptions.getQueue(),
+                                                   expectedMessagesOptions.getTimeout());
 
             if (message == null) {
                 new Fail("expected but not found:").withObject(expectedDataMap).fire();
             }
 
-            assertReceivedMessage(expectedMessages, expectedDataMap, message);
+            assertReceivedMessage(expectedMessagesOptions, expectedDataMap, message);
 
-            if (isEmptyDataMap(expectedDataMap) || timeLimit(startTime, expectedMessages.timeout())) {
+            if (isEmptyDataMap(expectedDataMap) || timeLimit(startTime, expectedMessagesOptions.getTimeout())) {
                 processing = false;
             }
         }
     }
 
-    private void assertReceivedMessage(ExpectedMessages expectedMessages,
+    private void assertReceivedMessage(ExpectedMessagesOptions expectedMessages,
                                        Map<String, List<Map<String, Object>>> expectedDataMap,
                                        Object message) {
 
         String className = message.getClass().getCanonicalName();
 
         if (!expectedDataMap.containsKey(className)) {
-            if (expectedMessages.ignoreUnexpected()) {
+            if (expectedMessages.isIgnoreUnexpected()) {
                 return;
             }
             new Fail("not expected but found:").withObject(message).fire();
@@ -107,7 +108,7 @@ public class AssertReceivedMessages {
 
         Map<String, Object> map = mapper.convertValue(message, Map.class);
         if (!expectedDataMap.get(className).contains(map)) {
-            if (expectedMessages.ignoreUnexpected()) {
+            if (expectedMessages.isIgnoreUnexpected()) {
                 return;
             }
             new Fail("not expected but found: `" + className + "`:").withObject(message).fire();
@@ -116,7 +117,7 @@ public class AssertReceivedMessages {
         removeEntryFromExpected(expectedDataMap, className, map);
     }
 
-    private boolean timeLimit(long startTime, int timeout) {
+    private boolean timeLimit(long startTime, long timeout) {
         return (System.currentTimeMillis() - startTime > timeout);
     }
 

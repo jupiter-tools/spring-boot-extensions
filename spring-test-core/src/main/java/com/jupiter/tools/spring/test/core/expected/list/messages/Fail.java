@@ -1,4 +1,4 @@
-package com.jupiter.tools.spring.test.activemq.extension.expectedmess;
+package com.jupiter.tools.spring.test.core.expected.list.messages;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 /**
  * Created on 27.03.2019.
  *
- * TODO: replace on javadoc
+ * Assert.fail with object serialization in the log.
  *
  * @author Korovin Anatoliy
  */
@@ -34,7 +34,7 @@ public class Fail {
         }
         catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new RuntimeException("Object Serrialization Error");
+            throw new RuntimeException("Object Serialization Error");
         }
         return this;
     }

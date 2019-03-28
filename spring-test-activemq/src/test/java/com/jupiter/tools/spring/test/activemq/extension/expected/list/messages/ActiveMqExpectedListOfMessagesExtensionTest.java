@@ -1,10 +1,10 @@
-package com.jupiter.tools.spring.test.activemq.extension;
+package com.jupiter.tools.spring.test.activemq.extension.expected.list.messages;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.activemq.annotation.meta.EnableActiveMqTest;
 import com.jupiter.tools.spring.test.activemq.extension.expected.Foo;
+import com.jupiter.tools.spring.test.activemq.extension.expected.list.messages.ActiveMqExpectedListOfMessagesExtension;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -23,8 +23,8 @@ import org.springframework.jms.support.converter.MessageType;
  * @author Korovin Anatoliy
  */
 @EnableActiveMqTest
-@ExtendWith(ExpectedMessagesExtension.class)
-class ExpectedMessagesExtensionTest {
+@ExtendWith(ActiveMqExpectedListOfMessagesExtension.class)
+class ActiveMqExpectedListOfMessagesExtensionTest {
 
     @Autowired
     private JmsTemplate jmsTemplate;

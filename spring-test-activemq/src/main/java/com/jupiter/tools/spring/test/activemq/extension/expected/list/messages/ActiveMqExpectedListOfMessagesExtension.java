@@ -1,9 +1,9 @@
-package com.jupiter.tools.spring.test.activemq.extension;
+package com.jupiter.tools.spring.test.activemq.extension.expected.list.messages;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
-import com.jupiter.tools.spring.test.activemq.extension.expectedmess.ActiveMqMessageBroker;
-import com.jupiter.tools.spring.test.activemq.extension.expectedmess.AssertReceivedMessages;
-import com.jupiter.tools.spring.test.activemq.extension.expectedmess.MessageBroker;
+import com.jupiter.tools.spring.test.core.expected.list.messages.AssertReceivedMessages;
+import com.jupiter.tools.spring.test.core.expected.list.messages.ExpectedMessagesOptions;
+import com.jupiter.tools.spring.test.core.expected.list.messages.MessageBroker;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  *
  * @author Korovin Anatoliy
  */
-public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCallback {
+public class ActiveMqExpectedListOfMessagesExtension implements BeforeAllCallback, AfterEachCallback {
 
     private MessageBroker messageBroker;
 
@@ -28,8 +28,12 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
 
         ExpectedMessages expectedMessages = context.getRequiredTestMethod()
                                                    .getAnnotation(ExpectedMessages.class);
+        if(expectedMessages == null) {
+            return;
+        }
 
-        new AssertReceivedMessages(expectedMessages, messageBroker).doAssert();
+        ExpectedMessagesOptions options = new ExpectedMessagesMapper(expectedMessages).getOptions();
+        new AssertReceivedMessages(options, messageBroker).doAssert();
     }
 
     @Override
@@ -43,4 +47,5 @@ public class ExpectedMessagesExtension implements BeforeAllCallback, AfterEachCa
 
         messageBroker = new ActiveMqMessageBroker(jmsTemplate);
     }
+
 }

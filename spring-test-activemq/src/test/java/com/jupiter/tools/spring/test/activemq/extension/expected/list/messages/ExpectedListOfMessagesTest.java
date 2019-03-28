@@ -1,8 +1,10 @@
-package com.jupiter.tools.spring.test.activemq.extension.expected;
+package com.jupiter.tools.spring.test.activemq.extension.expected.list.messages;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.activemq.annotation.meta.EnableActiveMqTest;
-import com.jupiter.tools.spring.test.activemq.extension.ExpectedMessagesExtension;
+import com.jupiter.tools.spring.test.activemq.extension.expected.Bar;
+import com.jupiter.tools.spring.test.activemq.extension.expected.Foo;
+import com.jupiter.tools.spring.test.activemq.extension.expected.list.messages.ActiveMqExpectedListOfMessagesExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -23,7 +25,7 @@ import org.springframework.jms.support.converter.MessageType;
  */
 @SpringBootTest
 @EnableActiveMqTest
-@ExtendWith(ExpectedMessagesExtension.class)
+@ExtendWith(ActiveMqExpectedListOfMessagesExtension.class)
 public class ExpectedListOfMessagesTest {
 
     @Autowired
@@ -43,7 +45,7 @@ public class ExpectedListOfMessagesTest {
         // first type:
         jmsTemplate.convertAndSend("test-queue", new Foo("123"));
         // second type:
-        jmsTemplate.convertAndSend("test-queue", new Bar("AAA",1));
+        jmsTemplate.convertAndSend("test-queue", new Bar("AAA", 1));
         jmsTemplate.convertAndSend("test-queue", new Bar("BBB",2));
         jmsTemplate.convertAndSend("test-queue", new Bar("CCC",3));
     }
