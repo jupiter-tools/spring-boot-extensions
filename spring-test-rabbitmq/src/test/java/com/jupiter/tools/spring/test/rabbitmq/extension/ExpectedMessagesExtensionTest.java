@@ -3,6 +3,7 @@ package com.jupiter.tools.spring.test.rabbitmq.extension;
 import com.jupiter.tools.spring.test.rabbitmq.annotation.EnableRabbitMqTestContainers;
 import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.rabbitmq.annotation.meta.EnableRabbitMqTest;
+import com.jupiter.tools.spring.test.rabbitmq.extension.expected.list.messages.RabbitMqExpectedListOfMessagesExtension;
 import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Bar;
 import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Foo;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @EnableRabbitMqTestContainers
-@ExtendWith(ExpectedMessagesExtension.class)
+@ExtendWith(RabbitMqExpectedListOfMessagesExtension.class)
 class ExpectedMessagesExtensionTest {
 
     @Autowired
