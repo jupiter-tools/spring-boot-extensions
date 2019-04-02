@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Created on 07.02.2019.
- *
- * TODO: replace on javadoc
+ * Created on 07.02.2019
  *
  * @author Korovin Anatoliy
  */

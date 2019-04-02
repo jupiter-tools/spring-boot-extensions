@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created on 25.03.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 class ImportFileTest {
