@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 import com.jupiter.tools.spring.test.rabbitmq.extension.RabbitMqTcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Created on 28.01.2019.
@@ -16,5 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith(RabbitMqTcExtension.class)
+@ActiveProfiles("jupiter-tools.spring-test-rabbitmq.test-containers")
 public @interface EnableRabbitMqTestContainers {
 }

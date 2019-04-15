@@ -3,6 +3,7 @@ package com.jupiter.tools.spring.test.postgres.annotation;
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import com.jupiter.tools.spring.test.postgres.extension.PostgresTcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,5 +21,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @ExtendWith(PostgresTcExtension.class)
 @ExtendWith(TraceSqlExtension.class)
+@ActiveProfiles("jupiter-tools.spring-test-postgres.test-containers")
 public @interface EnablePostgresTestContainers {
 }
