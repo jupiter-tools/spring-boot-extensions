@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>spring-test-jpa</artifactId>
-    <version>0.2</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>spring-test-jpa</name>
@@ -24,11 +24,13 @@
 
     <dependencies>
 
+        <!-- CORE -->
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>spring-test-core</artifactId>
-            <version>0.2</version>
+            <version>0.2-SNAPSHOT</version>
         </dependency>
+        <!-- CORE -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

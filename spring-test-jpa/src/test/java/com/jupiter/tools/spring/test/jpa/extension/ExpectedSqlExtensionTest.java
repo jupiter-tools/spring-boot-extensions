@@ -1,19 +1,25 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.jupiter.tools.spring.test.jpa.annotation.ExpectedSqlQuery;
 import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
-import com.jupiter.tools.spring.test.jpa.tracesql.QueryType;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import static com.jupiter.tools.spring.test.jpa.tracesql.QueryType.CALL;
+import static com.jupiter.tools.spring.test.jpa.tracesql.QueryType.DELETE;
+import static com.jupiter.tools.spring.test.jpa.tracesql.QueryType.INSERT;
+import static com.jupiter.tools.spring.test.jpa.tracesql.QueryType.SELECT;
+import static com.jupiter.tools.spring.test.jpa.tracesql.QueryType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -21,11 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Korovin Anatoliy
  */
-@ExtendWith(TraceSqlExtension.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Import(TransactionalTestConfig.class)
-class TraceSqlExtensionTest {
+class ExpectedSqlExtensionTest {
 
     @Autowired
     private TransactionalTestConfig.FooRepository fooRepository;
@@ -37,22 +42,19 @@ class TraceSqlExtensionTest {
     }
 
     @Test
+    @ExpectedSqlQuery(type = INSERT, count = 1)
     void testInsert() {
-        // Act
         fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
-        // Assert
-        AssertSqlQueryCount.assertCount(QueryType.INSERT, 1);
     }
 
     @Test
+    @ExpectedSqlQuery(type = SELECT, count = 1)
     void testSelect() {
-        // Act
         fooRepository.findAll();
-        // Asserts
-        AssertSqlQueryCount.assertCount(QueryType.SELECT, 1);
     }
 
     @Test
+    @ExpectedSqlQuery(type = UPDATE, count = 1)
     void testUpdate() {
         // Arrange
         TransactionalTestConfig.Foo foo =
@@ -61,29 +63,27 @@ class TraceSqlExtensionTest {
         foo.setField("up");
         // Act
         fooRepository.save(foo);
-        // Asserts
-        AssertSqlQueryCount.assertCount(QueryType.UPDATE, 1);
     }
 
+
     @Test
+    @ExpectedSqlQuery(type = DELETE, count = 1)
     void testDelete() {
         // Arrange
         fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
         // Act
         fooRepository.deleteAll();
-        // Asserts
-        AssertSqlQueryCount.assertCount(QueryType.DELETE,1);
     }
 
     @Test
+    @ExpectedSqlQuery(type = CALL, count = 1)
     void testCall() {
         // Act
         fooRepository.rand();
-        // Asserts
-        AssertSqlQueryCount.assertCount(QueryType.CALL, 1);
     }
 
     @Test
+    @ExpectedSqlQuery(type = CALL, count = 10)
     void testCallSeq() {
         // Arrange
         Set<Long> rands = new HashSet<>();
@@ -93,34 +93,20 @@ class TraceSqlExtensionTest {
         }
         // Asserts
         assertThat(rands.size() > 3).isTrue();
-        AssertSqlQueryCount.assertCount(QueryType.CALL, 10);
     }
 
     @Test
-    void testReset() {
+    @ExpectedSqlQuery(type = UPDATE, count = 1)
+    @ExpectedSqlQuery(type = SELECT, count = 3)
+    void testRepeatableAnnotations() {
         // Arrange
-        TransactionalTestConfig.Foo foo = fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
+        TransactionalTestConfig.Foo foo =
+                fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
+
         foo.setField("up");
+        // UPDATE
         fooRepository.save(foo);
+        // SELECT
         fooRepository.findAll();
-        fooRepository.deleteAll();
-        fooRepository.rand();
-        // Act
-        AssertSqlQueryCount.reset();
-        // Asserts
-        AssertSqlQueryCount.assertCount(QueryType.CALL, 0);
-        AssertSqlQueryCount.assertCount(QueryType.DELETE, 0);
-        AssertSqlQueryCount.assertCount(QueryType.UPDATE, 0);
-        AssertSqlQueryCount.assertCount(QueryType.SELECT, 0);
-        AssertSqlQueryCount.assertCount(QueryType.INSERT, 0);
-    }
-
-    @Test
-    void testThrows() {
-        // Arrange
-        // Act
-        Assertions.assertThrows(Exception.class,
-                                () -> AssertSqlQueryCount.assertCount(QueryType.SELECT, 1));
-        // Asserts
     }
 }

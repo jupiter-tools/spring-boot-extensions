@@ -1,7 +1,9 @@
 package com.jupiter.tools.spring.test.jpa.tracesql;
 
 /**
- * Created by Igor Dmitriev / Mikalai Alimenkou on 12/6/15
+ * @author Igor Dmitriev
+ * @author Mikalai Alimenkou
+ * @author Korovin Anatoliy
  */
 public interface QueryHandler {
     void handleSql(String sql);

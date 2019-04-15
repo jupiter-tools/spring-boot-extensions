@@ -46,6 +46,24 @@ class TraceSqlExtensionTest {
 }
 ----
 
+Also, you can use annotation on the test case to assert the expected count of executed queries:
+
+[source, java]
+----
+@Test
+@ExpectedSqlQuery(type = INSERT, count = 1)
+void testInsert() {
+    fooRepository.save(new Foo("data"));
+}
+
+@Test
+@ExpectedSqlQuery(type = SELECT, count = 1)
+void testSelect() {
+    fooRepository.findAll();
+}
+----
+
+
 ### PostgreSQL Extension
 
 To run the docker postgres image by the test-containers library
