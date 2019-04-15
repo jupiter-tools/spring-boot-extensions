@@ -56,6 +56,7 @@ class ExpectedSqlExtensionTest {
         fooRepository.save(foo);
     }
 
+
     @Test
     @ExpectedSqlQuery(type = DELETE, count = 1)
     void testDelete() {
@@ -83,5 +84,20 @@ class ExpectedSqlExtensionTest {
         }
         // Asserts
         assertThat(rands.size() > 3).isTrue();
+    }
+
+    @Test
+    @ExpectedSqlQuery(type = UPDATE, count = 1)
+    @ExpectedSqlQuery(type = SELECT, count = 3)
+    void testRepeatableAnnotations() {
+        // Arrange
+        TransactionalTestConfig.Foo foo =
+                fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
+
+        foo.setField("up");
+        // UPDATE
+        fooRepository.save(foo);
+        // SELECT
+        fooRepository.findAll();
     }
 }
