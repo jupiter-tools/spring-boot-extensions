@@ -32,6 +32,7 @@ class TraceSqlExtensionTest {
 
     @BeforeEach
     void setUp() {
+        fooRepository.deleteAll();
         AssertSqlQueryCount.reset();
     }
 

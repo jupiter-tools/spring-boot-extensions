@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.jupiter.tools.spring.test.jpa.annotation.ExpectedSqlQuery;
+import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -31,6 +34,12 @@ class ExpectedSqlExtensionTest {
 
     @Autowired
     private TransactionalTestConfig.FooRepository fooRepository;
+
+    @BeforeEach
+    void setUp() {
+        fooRepository.deleteAll();
+        AssertSqlQueryCount.reset();
+    }
 
     @Test
     @ExpectedSqlQuery(type = INSERT, count = 1)
