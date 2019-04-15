@@ -3,6 +3,7 @@ package com.jupiter.tools.spring.test.mysql.annotation;
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import com.jupiter.tools.spring.test.mysql.extension.MySqlTcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.lang.annotation.ElementType;
@@ -21,5 +22,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @ExtendWith(MySqlTcExtension.class)
 @ExtendWith(TraceSqlExtension.class)
+@ActiveProfiles("jupiter-tools.spring-test-mysql.test-containers")
 public @interface EnableMySqlTestContainers {
 }
