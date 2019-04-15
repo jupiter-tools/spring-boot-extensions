@@ -1,7 +1,8 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
 import com.jupiter.tools.spring.test.jpa.annotation.EnableDataTest;
-import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.QueryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +27,7 @@ class EnableDataTestTest {
 
     @BeforeEach
     void setUp() {
-        AssertSqlCount.reset();
+        AssertSqlQueryCount.reset();
     }
 
     @Test
@@ -36,6 +37,6 @@ class EnableDataTestTest {
         // Act
         fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
         // Assert
-        AssertSqlCount.assertInsertCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.INSERT,1);
     }
 }

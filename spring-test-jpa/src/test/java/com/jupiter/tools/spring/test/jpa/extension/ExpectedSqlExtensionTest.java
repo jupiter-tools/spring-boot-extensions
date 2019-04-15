@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.jupiter.tools.spring.test.jpa.annotation.ExpectedSqlQuery;
-import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
-import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.QueryType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class TraceSqlExtensionTest {
 
     @BeforeEach
     void setUp() {
-        AssertSqlCount.reset();
+        AssertSqlQueryCount.reset();
     }
 
     @Test
@@ -39,7 +40,7 @@ class TraceSqlExtensionTest {
         // Act
         fooRepository.save(new TransactionalTestConfig.Foo(1L, "any data"));
         // Assert
-        AssertSqlCount.assertInsertCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.INSERT, 1);
     }
 
     @Test
@@ -47,7 +48,7 @@ class TraceSqlExtensionTest {
         // Act
         fooRepository.findAll();
         // Asserts
-        AssertSqlCount.assertSelectCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.SELECT, 1);
     }
 
     @Test
@@ -60,7 +61,7 @@ class TraceSqlExtensionTest {
         // Act
         fooRepository.save(foo);
         // Asserts
-        AssertSqlCount.assertUpdateCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.UPDATE, 1);
     }
 
     @Test
@@ -70,7 +71,7 @@ class TraceSqlExtensionTest {
         // Act
         fooRepository.deleteAll();
         // Asserts
-        AssertSqlCount.assertDeleteCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.DELETE,1);
     }
 
     @Test
@@ -78,7 +79,7 @@ class TraceSqlExtensionTest {
         // Act
         fooRepository.rand();
         // Asserts
-        AssertSqlCount.assertCallCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.CALL, 1);
     }
 
     @Test
@@ -91,7 +92,7 @@ class TraceSqlExtensionTest {
         }
         // Asserts
         assertThat(rands.size() > 3).isTrue();
-        AssertSqlCount.assertCallCount(10);
+        AssertSqlQueryCount.assertCount(QueryType.CALL, 10);
     }
 
     @Test
@@ -104,13 +105,13 @@ class TraceSqlExtensionTest {
         fooRepository.deleteAll();
         fooRepository.rand();
         // Act
-        AssertSqlCount.reset();
+        AssertSqlQueryCount.reset();
         // Asserts
-        AssertSqlCount.assertCallCount(0);
-        AssertSqlCount.assertDeleteCount(0);
-        AssertSqlCount.assertUpdateCount(0);
-        AssertSqlCount.assertSelectCount(0);
-        AssertSqlCount.assertInsertCount(0);
+        AssertSqlQueryCount.assertCount(QueryType.CALL, 0);
+        AssertSqlQueryCount.assertCount(QueryType.DELETE, 0);
+        AssertSqlQueryCount.assertCount(QueryType.UPDATE, 0);
+        AssertSqlQueryCount.assertCount(QueryType.SELECT, 0);
+        AssertSqlQueryCount.assertCount(QueryType.INSERT, 0);
     }
 
     @Test
@@ -118,7 +119,7 @@ class TraceSqlExtensionTest {
         // Arrange
         // Act
         Assertions.assertThrows(Exception.class,
-                                () -> AssertSqlCount.assertSelectCount(1));
+                                () -> AssertSqlQueryCount.assertCount(QueryType.SELECT, 1));
         // Asserts
     }
 }

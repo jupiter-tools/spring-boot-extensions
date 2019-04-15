@@ -10,22 +10,30 @@ import static com.jupiter.tools.spring.test.jpa.tracesql.QueryCountInfoHolder.ge
 /**
  * Created on 15.04.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 public class AssertSqlQueryCount {
 
     private static Logger log = LoggerFactory.getLogger(AssertSqlQueryCount.class);
 
+    /**
+     * reset the thread-local counter of current executed queries
+     */
     public static void reset() {
         log.debug("assertSql.reset()");
         getQueryInfo().clear();
     }
 
+    /**
+     * Assert count of executed queries
+     *
+     * @param queryType     SQL query type
+     * @param expectedCount expected count of invocation this type of SQL statements
+     */
     public static void assertCount(QueryType queryType, int expectedCount) {
         assertSqlCount(queryType, expectedCount, getActualQueryCount(queryType));
     }
+
 
     private static int getActualQueryCount(QueryType queryType) {
         switch (queryType) {

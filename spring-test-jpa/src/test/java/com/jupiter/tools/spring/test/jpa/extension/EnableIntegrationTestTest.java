@@ -1,7 +1,8 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
 import com.jupiter.tools.spring.test.core.annotation.EnableIntegrationTest;
-import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
+import com.jupiter.tools.spring.test.jpa.tracesql.QueryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ class EnableIntegrationTestTest {
 
     @BeforeEach
     void setUp() {
-        AssertSqlCount.reset();
+        AssertSqlQueryCount.reset();
     }
 
     @Test
@@ -31,6 +32,6 @@ class EnableIntegrationTestTest {
         // Act
         testService.ok();
         // Assert
-        AssertSqlCount.assertInsertCount(1);
+        AssertSqlQueryCount.assertCount(QueryType.INSERT, 1);
     }
 }

@@ -1,7 +1,6 @@
 package com.jupiter.tools.spring.test.jpa.extension;
 
 import com.jupiter.tools.spring.test.jpa.annotation.ExpectedSqlQuery;
-import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlCount;
 import com.jupiter.tools.spring.test.jpa.tracesql.AssertSqlQueryCount;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
