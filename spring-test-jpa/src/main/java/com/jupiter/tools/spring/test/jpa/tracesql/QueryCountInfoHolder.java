@@ -1,15 +1,14 @@
 package com.jupiter.tools.spring.test.jpa.tracesql;
 
 /**
- * Created by Igor Dmitriev / Mikalai Alimenkou on 12/6/15
+ * @author Igor Dmitriev
+ * @author Mikalai Alimenkou
+ * @author Korovin Anatoliy
  */
 public class QueryCountInfoHolder {
-    private static final ThreadLocal<QueryCountInfo> QUERY_INFO_HOLDER = new ThreadLocal<QueryCountInfo>() {
-        @Override
-        protected QueryCountInfo initialValue() {
-            return new QueryCountInfo();
-        }
-    };
+
+    private static final ThreadLocal<QueryCountInfo> QUERY_INFO_HOLDER =
+            ThreadLocal.withInitial(() -> new QueryCountInfo());
 
     public static QueryCountInfo getQueryInfo() {
         return QUERY_INFO_HOLDER.get();

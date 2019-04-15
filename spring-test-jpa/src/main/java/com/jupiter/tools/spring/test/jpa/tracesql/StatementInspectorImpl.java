@@ -7,7 +7,8 @@ import org.hibernate.resource.jdbc.spi.StatementInspector;
  *
  * We using statement inspector for handling and counting sql query
  *
- * @author Igor Dmitriev / Mikalai Alimenkou
+ * @author Igor Dmitriev
+ * @author Mikalai Alimenkou
  * @author Korovin Anatolii
  */
 public class StatementInspectorImpl implements StatementInspector {
