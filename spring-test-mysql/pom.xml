@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>spring-test-jpa</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.2</version>
         </dependency>
 
         <!-- TestContainers -->

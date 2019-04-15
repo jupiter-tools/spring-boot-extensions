@@ -5,8 +5,6 @@ import java.io.Serializable;
 /**
  * Created on 07.02.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 

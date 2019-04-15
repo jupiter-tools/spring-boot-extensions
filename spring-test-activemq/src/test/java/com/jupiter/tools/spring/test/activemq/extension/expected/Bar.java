@@ -9,8 +9,6 @@ import lombok.Setter;
 /**
  * Created on 08.02.2019.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @Getter
