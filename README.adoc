@@ -231,6 +231,54 @@ public class ExpectedMessageTest {
 }
 ----
 
+Also, you can assert the receiving of multiple messages:
+
+[source, java]
+----
+@Autowired
+private AmqpTemplate amqpTemplate;
+
+@Test
+@ExpectedMessages(queue = "test-queue",  <1>
+                  messagesFile = "/datasets/expected_messages.json")  <2>
+void testSendListOfMessages() {
+    // first type:
+    amqpTemplate.convertAndSend("test-queue", new Foo("123"));
+    // second type:
+    amqpTemplate.convertAndSend("test-queue", new Bar("AAA",1));
+    amqpTemplate.convertAndSend("test-queue", new Bar("BBB",2));
+    amqpTemplate.convertAndSend("test-queue", new Bar("CCC",3));
+}
+----
+<1> queue name
+<2> file with expected messages in JSON format
+
+Content of the `expected_messages.json` :
+[source,json]
+----
+{
+  "com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Foo": [
+    {
+      "value":"123"
+    }
+  ],
+  "com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Bar":[
+    {
+      "name":"AAA",
+      "count":1
+    },
+    {
+      "name":"BBB",
+      "count":2
+    },
+    {
+      "name":"CCC",
+      "count":3
+    }
+  ]
+}
+----
+
 ### ActiveMq Extension
 
 You can run the ActiveMq docker image by the using of `EnableActiveMqTestContainers` annotation.
@@ -274,6 +322,52 @@ public class SendMessageTest {
     }
 }
 ----
+
+Also, you can assert the receiving of multiple messages:
+
+[source, java]
+----
+@Test
+@ExpectedMessages(queue = "test-queue",  <1>
+                  messagesFile = "/datasets/expected_messages.json")  <2>
+void testSendListOfMessages() {
+    // first type:
+    jmsTemplate.convertAndSend("test-queue", new Foo("123"));
+    // second type:
+    jmsTemplate.convertAndSend("test-queue", new Bar("AAA",1));
+    jmsTemplate.convertAndSend("test-queue", new Bar("BBB",2));
+    jmsTemplate.convertAndSend("test-queue", new Bar("CCC",3));
+}
+----
+<1> queue name
+<2> file with expected messages in JSON format
+
+Content of the `expected_messages.json` :
+[source,json]
+----
+{
+  "com.jupiter.tools.spring.test.activemq.extension.expected.Foo": [
+    {
+      "value":"123"
+    }
+  ],
+  "com.jupiter.tools.spring.test.activemq.extension.expected.Bar":[
+    {
+      "name":"AAA",
+      "count":1
+    },
+    {
+      "name":"BBB",
+      "count":2
+    },
+    {
+      "name":"CCC",
+      "count":3
+    }
+  ]
+}
+----
+
 
 ## Embedded Web Server
 

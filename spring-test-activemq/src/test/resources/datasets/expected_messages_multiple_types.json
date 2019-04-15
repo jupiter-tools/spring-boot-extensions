@@ -1,0 +1,21 @@
+{
+  "com.jupiter.tools.spring.test.activemq.extension.expected.Foo": [
+    {
+      "value":"123"
+    }
+  ],
+  "com.jupiter.tools.spring.test.activemq.extension.expected.Bar":[
+    {
+      "name":"AAA",
+      "count":1
+    },
+    {
+      "name":"BBB",
+      "count":2
+    },
+    {
+      "name":"CCC",
+      "count":3
+    }
+  ]
+}

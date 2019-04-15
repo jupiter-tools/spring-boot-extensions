@@ -1,7 +1,9 @@
 package com.jupiter.tools.spring.test.rabbitmq.extension;
 
 import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessage;
+import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.rabbitmq.annotation.meta.EnableRabbitMqTest;
+import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Foo;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.amqp.core.AmqpTemplate;
@@ -23,8 +25,16 @@ public class ExpectedMessageTest {
 
     @Test
     @ExpectedMessage(queue = "test-queue", message = "123")
-    void testSend() throws InterruptedException {
+    void testSend() {
         amqpTemplate.convertAndSend("test-queue", "123");
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json")
+    void testSendListOfMessages() {
+        amqpTemplate.convertAndSend("test-queue", new Foo("123"));
+        amqpTemplate.convertAndSend("test-queue", new Foo("456"));
+        amqpTemplate.convertAndSend("test-queue", new Foo("789"));
     }
 
     @TestConfiguration

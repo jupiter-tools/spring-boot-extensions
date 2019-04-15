@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>spring-boot-extensions-parent</artifactId>
-        <version>0.1</version>
+        <version>0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-test-rabbitmq</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>spring-test-rabbitmq</name>
@@ -32,6 +32,14 @@
         </dependency>
         <!-- RabbitMQ -->
 
+        <!-- import DataSets -->
+        <dependency>
+            <groupId>com.jupiter-tools</groupId>
+            <artifactId>spring-test-core</artifactId>
+            <version>0.2</version>
+        </dependency>
+        <!-- import DataSets -->
+
         <!-- TestContainers -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -48,6 +56,15 @@
             <version>3.1.0</version>
         </dependency>
         <!-- Awaitility -->
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Lombok -->
+
     </dependencies>
 
     <build>

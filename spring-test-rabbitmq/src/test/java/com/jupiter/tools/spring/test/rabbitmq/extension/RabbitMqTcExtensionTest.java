@@ -38,7 +38,7 @@ class RabbitMqTcExtensionTest {
     void testSend() {
         // Arrange
         // Act
-        amqpTemplate.convertAndSend("test-queue", "123");
+        amqpTemplate.convertAndSend("test-queue-with-listener", "123");
 
         await().atMost(3, TimeUnit.SECONDS)
                .until(() -> TestConfig.events.size() > 0);
@@ -54,14 +54,14 @@ class RabbitMqTcExtensionTest {
 
         @Bean
         public Queue testQueue() {
-            return new Queue("test-queue");
+            return new Queue("test-queue-with-listener");
         }
 
         @Component
         @EnableRabbit
         public class TestRabbitListener {
 
-            @RabbitListener(queues = "test-queue")
+            @RabbitListener(queues = "test-queue-with-listener")
             public void receive(String message) {
                 try {
                     Thread.sleep(1000);
