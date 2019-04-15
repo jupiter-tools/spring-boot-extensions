@@ -7,7 +7,6 @@ import java.io.Serializable;
  *
  * @author Korovin Anatoliy
  */
-
 public class Foo implements Serializable {
 
     private String value;
