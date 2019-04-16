@@ -20,7 +20,7 @@ You need to add the next dependency:
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-jpa</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
@@ -74,7 +74,7 @@ in your integration test, you can use PostgresTcExtension.
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-postgres</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
@@ -151,7 +151,7 @@ in the configuration to use this datasource in tests.
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mysql</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
@@ -196,7 +196,7 @@ and configure SpringBoot properties to work with this container.
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-rabbitmq</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
@@ -308,7 +308,7 @@ You need to use the next dependency:
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-activemq</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
@@ -401,7 +401,7 @@ web server with a mocked external controller and send HTTP requests to this serv
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-web</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ----
 
