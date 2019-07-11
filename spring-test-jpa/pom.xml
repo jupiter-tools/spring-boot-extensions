@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>spring-boot-extensions-parent</artifactId>
-        <version>0.2</version>
+        <version>0.3</version>
     </parent>
 
     <artifactId>spring-test-jpa</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <name>spring-test-jpa</name>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>spring-test-core</artifactId>
-            <version>0.2</version>
+            <version>0.3</version>
         </dependency>
         <!-- CORE -->
 
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.database-rider</groupId>
             <artifactId>rider-spring</artifactId>
-            <version>1.2.8</version>
+            <version>1.7.2</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>

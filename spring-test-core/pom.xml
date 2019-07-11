@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>spring-boot-extensions-parent</artifactId>
-        <version>0.2</version>
+        <version>0.3</version>
     </parent>
 
     <artifactId>spring-test-core</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <name>spring-test-core</name>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+            <version>2.9.9</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
