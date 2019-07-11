@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.database-rider</groupId>
             <artifactId>rider-spring</artifactId>
-            <version>1.2.8</version>
+            <version>1.7.2</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
