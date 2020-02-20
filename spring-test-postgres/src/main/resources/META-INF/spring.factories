@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory=\
+com.jupiter.tools.spring.test.postgres.customizer.PgContextCustomizerFactory

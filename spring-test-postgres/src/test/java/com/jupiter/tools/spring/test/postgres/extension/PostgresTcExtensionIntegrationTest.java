@@ -5,6 +5,7 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import com.jupiter.tools.spring.test.postgres.TransactionalTestConfig;
+import com.jupiter.tools.spring.test.postgres.customizer.NewPgTc;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -25,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DBRider
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ExtendWith(PostgresTcExtension.class)
 @ExtendWith(TraceSqlExtension.class)
+@NewPgTc
 @Import(TransactionalTestConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostgresTcExtensionIntegrationTest {

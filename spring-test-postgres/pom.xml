@@ -59,6 +59,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.antkorwin</groupId>
+            <artifactId>better-strings</artifactId>
+            <version>0.1</version>
+        </dependency>
+
     </dependencies>
 
 
