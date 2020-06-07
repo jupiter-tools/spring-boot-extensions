@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>spring-boot-extensions-parent</artifactId>
-        <version>0.3</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-test-web</artifactId>
-    <version>0.3</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>spring-test-web</name>

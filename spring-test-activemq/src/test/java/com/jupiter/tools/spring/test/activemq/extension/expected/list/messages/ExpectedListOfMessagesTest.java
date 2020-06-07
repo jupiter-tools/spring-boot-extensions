@@ -50,15 +50,6 @@ public class ExpectedListOfMessagesTest {
         jmsTemplate.convertAndSend("test-queue", new Bar("CCC",3));
     }
 
-    @Test
-    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json", ignoreUnexpected = true)
-    void testIgnoreUnexpected() {
-        jmsTemplate.convertAndSend("test-queue", new Foo("UNEXPECTED"));
-        jmsTemplate.convertAndSend("test-queue", new Foo("123"));
-        jmsTemplate.convertAndSend("test-queue", new Foo("456"));
-        jmsTemplate.convertAndSend("test-queue", new Foo("789"));
-    }
-
     @TestConfiguration
     public static class TestConfig {
         @Bean

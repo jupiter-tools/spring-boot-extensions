@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.jupiter-tools</groupId>
         <artifactId>spring-boot-extensions-parent</artifactId>
-        <version>0.3</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-test-core</artifactId>
-    <version>0.3</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>spring-test-core</name>
@@ -37,6 +37,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jupiter-tools</groupId>
+            <artifactId>datasetroll</artifactId>
+            <version>0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -22,7 +22,6 @@ public class ExpectedMessagesMapper {
         return ExpectedMessagesOptions.builder()
                                       .messagesFile(expectedMessages.messagesFile())
                                       .queue(expectedMessages.queue())
-                                      .ignoreUnexpected(expectedMessages.ignoreUnexpected())
                                       .timeout(expectedMessages.timeout())
                                       .build();
     }

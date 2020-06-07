@@ -50,15 +50,6 @@ class ExpectedMessagesExtensionTest {
         amqpTemplate.convertAndSend("test-queue", new Bar("CCC", 3));
     }
 
-    @Test
-    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json", ignoreUnexpected = true)
-    void testIgnoreUnexpected() {
-        amqpTemplate.convertAndSend("test-queue", new Foo("UNEXPECTED"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("123"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("456"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("789"));
-    }
-
     @TestConfiguration
     public static class TestConfig {
         @Bean
