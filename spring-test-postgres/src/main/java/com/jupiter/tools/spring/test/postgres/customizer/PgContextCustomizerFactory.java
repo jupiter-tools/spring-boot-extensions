@@ -22,11 +22,11 @@ public class PgContextCustomizerFactory implements ContextCustomizerFactory {
     public ContextCustomizer createContextCustomizer(Class<?> testClass,
                                                      List<ContextConfigurationAttributes> configAttributes) {
 
-        Set<NewPgTc> annotations = AnnotationUtils.getRepeatableAnnotations(testClass,
-                                                                            NewPgTc.class);
+        Set<PostgresTestContainer> annotations = AnnotationUtils.getRepeatableAnnotations(testClass,
+                                                                                          PostgresTestContainer.class);
 
         Set<String> descriptions = annotations.stream()
-                                              .map(NewPgTc::value)
+                                              .map(PostgresTestContainer::value)
                                               .collect(Collectors.toSet());
 
         return new PgContextCustomizer(descriptions);

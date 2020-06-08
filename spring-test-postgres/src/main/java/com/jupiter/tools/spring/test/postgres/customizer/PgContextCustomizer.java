@@ -24,10 +24,16 @@ public class PgContextCustomizer implements ContextCustomizer {
 
     private static final Logger log = LoggerFactory.getLogger(PgContextCustomizer.class);
 
-    private Set<String> value;
+    /**
+     * The set of prefixes to the spring datasource properties,
+     * each value will be started a separate container of Postgres.
+     *
+     * Default value is 'spring.datasource'
+     */
+    private Set<String> dataSourcePropertiesMapping;
 
     public PgContextCustomizer(Set<String> value){
-        this.value = value;
+        this.dataSourcePropertiesMapping = value;
     }
 
     @Override
@@ -35,12 +41,12 @@ public class PgContextCustomizer implements ContextCustomizer {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
         PgContextCustomizer that = (PgContextCustomizer) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(dataSourcePropertiesMapping, that.dataSourcePropertiesMapping);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(dataSourcePropertiesMapping);
     }
 
 
@@ -50,26 +56,27 @@ public class PgContextCustomizer implements ContextCustomizer {
                                  MergedContextConfiguration mergedContextConfiguration) {
 
 
-        if(value==null || value.isEmpty()){
+        if(dataSourcePropertiesMapping == null || dataSourcePropertiesMapping.isEmpty()){
             return;
         }
 
-        log.debug("Try to start PostgreSQL TestContainer");
-        PostgreSQLContainer postgres = new PostgreSQLContainer();
-        postgres.start();
+        for(String dataSourcePrefix : dataSourcePropertiesMapping) {
 
-        log.debug("Started PostgreSQL TestContainer at:[{}]", postgres.getJdbcUrl());
+            log.info("Try to start PostgreSQL TestContainer -> {}",dataSourcePrefix);
+            PostgreSQLContainer postgres = new PostgreSQLContainer();
+            postgres.start();
+            log.info("Started PostgreSQL TestContainer at:[{}]", postgres.getJdbcUrl());
 
+            String dialect = PostgreSQL9Dialect.class.getCanonicalName();
 
-        String dialect = PostgreSQL9Dialect.class.getCanonicalName();
+            TestPropertyValues testPropertyValues =
+                    TestPropertyValues.of("${dataSourcePrefix}.driver-class-name=${postgres.getDriverClassName()}",
+                                          "${dataSourcePrefix}.url=${postgres.getJdbcUrl()}",
+                                          "${dataSourcePrefix}.username=${postgres.getUsername()}",
+                                          "${dataSourcePrefix}.password=${postgres.getPassword()}",
+                                          "spring.jpa.properties.hibernate.dialect=${dialect}");
 
-        TestPropertyValues testPropertyValues =
-                TestPropertyValues.of("spring.datasource.driver-class-name=${postgres.getDriverClassName()}",
-                                      "spring.datasource.url=${postgres.getJdbcUrl()}",
-                                      "spring.datasource.username=${postgres.getUsername()}",
-                                      "spring.datasource.password=${postgres.getPassword()}",
-                                      "spring.jpa.properties.hibernate.dialect=${dialect}");
-
-        testPropertyValues.applyTo(configurableApplicationContext);
+            testPropertyValues.applyTo(configurableApplicationContext);
+        }
     }
 }

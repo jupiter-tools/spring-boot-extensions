@@ -1,19 +1,20 @@
-package com.jupiter.tools.spring.test.postgres.annotation.meta;
+package com.jupiter.tools.spring.test.postgres.annotation.meta.v2;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.jupiter.tools.spring.test.postgres.TransactionalTestConfig;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
+
 
 /**
  * Created on 23.01.2019.
  *
  * @author Korovin Anatoliy
  */
-@ActiveProfiles("123")
 @EnablePostgresIntegrationTest
 @Import(TransactionalTestConfig.class)
 class EnablePostgresIntegrationTestTest {

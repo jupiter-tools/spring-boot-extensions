@@ -4,6 +4,7 @@ package com.jupiter.tools.spring.test.postgres.annotation.meta;
 import com.jupiter.tools.spring.test.core.annotation.EnableIntegrationTest;
 import com.jupiter.tools.spring.test.jpa.annotation.EnableRiderTest;
 import com.jupiter.tools.spring.test.postgres.annotation.EnablePostgresTestContainers;
+import com.jupiter.tools.spring.test.postgres.annotation.EnableSpringRider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,7 +22,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @EnableIntegrationTest
-@EnableRiderTest
+@EnableSpringRider
 @EnablePostgresTestContainers
 public @interface EnablePostgresIntegrationTest {
 }

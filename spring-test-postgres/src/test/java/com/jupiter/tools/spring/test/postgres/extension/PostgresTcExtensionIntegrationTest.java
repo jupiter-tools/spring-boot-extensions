@@ -5,15 +5,16 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import com.jupiter.tools.spring.test.postgres.TransactionalTestConfig;
-import com.jupiter.tools.spring.test.postgres.customizer.NewPgTc;
+import com.jupiter.tools.spring.test.postgres.annotation.meta.EnablePostgresIntegrationTest;
+import com.jupiter.tools.spring.test.postgres.customizer.PostgresTestContainer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,11 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Korovin Anatoliy
  */
-@DBRider
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@ExtendWith(TraceSqlExtension.class)
-@NewPgTc
+@EnablePostgresIntegrationTest
 @Import(TransactionalTestConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostgresTcExtensionIntegrationTest {
@@ -36,7 +33,7 @@ class PostgresTcExtensionIntegrationTest {
     private TransactionalTestConfig.TestService testService;
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
+    @DataSet(value ="/datasets/empty.json",  cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
     void testCreate() {
         testService.ok();

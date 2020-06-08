@@ -7,11 +7,9 @@ import java.util.List;
 
 import com.jupiter.tools.spring.test.jpa.extension.TraceSqlExtension;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -25,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @ExtendWith(PostgresTcExtension.class)
+//@NewPgTc
 @ExtendWith(TraceSqlExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostgresTcExtensionTest {
