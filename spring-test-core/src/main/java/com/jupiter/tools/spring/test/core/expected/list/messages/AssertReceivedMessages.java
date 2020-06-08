@@ -96,6 +96,7 @@ public class AssertReceivedMessages {
         }
     }
 
+    //TODO: replace this in a separate DataSet implementation
 	private DataSet buildDataSetFromMessages(List<Object> messages) {
 
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
