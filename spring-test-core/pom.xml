@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>datasetroll</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 

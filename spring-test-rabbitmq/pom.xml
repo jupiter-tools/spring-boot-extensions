@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>spring-test-core</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
         <!-- import DataSets -->
 
