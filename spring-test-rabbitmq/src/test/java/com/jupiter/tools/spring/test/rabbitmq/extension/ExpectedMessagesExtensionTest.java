@@ -1,16 +1,20 @@
 package com.jupiter.tools.spring.test.rabbitmq.extension;
 
+import java.util.Date;
+
 import com.jupiter.tools.spring.test.rabbitmq.annotation.EnableRabbitMqTestContainers;
 import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessages;
-import com.jupiter.tools.spring.test.rabbitmq.annotation.meta.EnableRabbitMqTest;
 import com.jupiter.tools.spring.test.rabbitmq.extension.expected.list.messages.RabbitMqExpectedListOfMessagesExtension;
 import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Bar;
 import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Foo;
+import com.jupiter.tools.spring.test.rabbitmq.extension.pojo.FooWithBar;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -51,12 +55,43 @@ class ExpectedMessagesExtensionTest {
     }
 
     @Test
-    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json", ignoreUnexpected = true)
-    void testIgnoreUnexpected() {
-        amqpTemplate.convertAndSend("test-queue", new Foo("UNEXPECTED"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("123"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("456"));
-        amqpTemplate.convertAndSend("test-queue", new Foo("789"));
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_nested_objects.json")
+    void testSendObjectWithNested() {
+
+        Foo childFoo = new Foo("child foo");
+        Bar childBar = new Bar("child bar", 1);
+        FooWithBar child = FooWithBar.builder()
+                                     .foo(childFoo)
+                                     .bar(childBar)
+                                     .build();
+
+        Foo foo = new Foo("parent foo");
+        Bar bar = new Bar("parent bar", 2);
+        FooWithBar fooWithBar = FooWithBar.builder()
+                                     .foo(foo)
+                                     .bar(bar)
+                                     .child(child)
+                                     .build();
+
+        amqpTemplate.convertAndSend("test-queue", fooWithBar);
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_js.json")
+    void testExpectedDataSetWithJavaScript() {
+        amqpTemplate.convertAndSend("test-queue", new Foo( String.valueOf(1+2+3+4+5)));
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_date.json")
+    void testExpectedWithDate() {
+        // Arrange
+        FooWithBar fooWithBar = FooWithBar.builder()
+                                          // NOW
+                                          .time(new Date())
+                                          .build();
+        // Act
+        amqpTemplate.convertAndSend("test-queue", fooWithBar);
     }
 
     @TestConfiguration
@@ -64,6 +99,11 @@ class ExpectedMessagesExtensionTest {
         @Bean
         public Queue testQueue() {
             return new Queue("test-queue");
+        }
+
+        @Bean
+        public MessageConverter jackson2JsonMessageConverter() {
+            return new Jackson2JsonMessageConverter();
         }
     }
 

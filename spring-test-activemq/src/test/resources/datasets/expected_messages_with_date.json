@@ -1,0 +1,7 @@
+{
+  "com.jupiter.tools.spring.test.activemq.extension.expected.FooWithBar": [
+    {
+      "time": "date-match:[NOW]"
+    }
+  ]
+}

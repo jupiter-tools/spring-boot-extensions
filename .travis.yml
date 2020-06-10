@@ -8,8 +8,7 @@ script:
 addons:
   sonarcloud:
     organization: "antkorwin-github"
-    token:
-      secure: $SONAR_CLOUD_KEY
+    token: $SONAR_CLOUD_KEY
 
 after_success:
  - mvn cobertura:cobertura

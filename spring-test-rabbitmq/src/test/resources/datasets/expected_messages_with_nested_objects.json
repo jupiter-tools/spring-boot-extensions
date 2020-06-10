@@ -1,0 +1,23 @@
+{
+  "com.jupiter.tools.spring.test.rabbitmq.extension.pojo.FooWithBar": [
+    {
+      "foo": {
+        "value": "parent foo"
+      },
+      "bar": {
+        "name": "parent bar",
+        "count": 2
+      },
+      "child": {
+        "foo": {
+          "value": "child foo"
+        },
+        "bar": {
+          "name": "child bar",
+          "count": 1
+        },
+        "child": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "com.jupiter.tools.spring.test.rabbitmq.extension.pojo.Foo": [
+    {
+      "value":"js-match: value == 1+2+3+4+5"
+    }
+  ]
+}

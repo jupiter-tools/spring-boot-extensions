@@ -1,0 +1,7 @@
+{
+  "com.jupiter.tools.spring.test.rabbitmq.extension.pojo.FooWithBar": [
+    {
+      "time": "date-match:[NOW]"
+    }
+  ]
+}

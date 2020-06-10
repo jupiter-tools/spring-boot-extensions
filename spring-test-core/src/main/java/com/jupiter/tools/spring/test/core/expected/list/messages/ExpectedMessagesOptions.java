@@ -28,9 +28,4 @@ public class ExpectedMessagesOptions {
      * The path to the JSON file with expected messages
      */
     private String messagesFile;
-
-    /**
-     * Ignore the receiving of unexpected messages (if true)
-     */
-    private boolean ignoreUnexpected;
 }

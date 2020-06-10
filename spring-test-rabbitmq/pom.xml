@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>spring-test-rabbitmq</artifactId>
-    <version>0.3</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>spring-test-rabbitmq</name>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.jupiter-tools</groupId>
             <artifactId>spring-test-core</artifactId>
-            <version>0.3</version>
+            <version>${parent.version}</version>
         </dependency>
         <!-- import DataSets -->
 

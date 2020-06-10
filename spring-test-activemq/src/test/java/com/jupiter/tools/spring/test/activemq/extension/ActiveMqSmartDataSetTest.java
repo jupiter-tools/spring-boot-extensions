@@ -1,16 +1,15 @@
-package com.jupiter.tools.spring.test.activemq.extension.expected.list.messages;
+package com.jupiter.tools.spring.test.activemq.extension;
+
+import java.util.Date;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessages;
 import com.jupiter.tools.spring.test.activemq.annotation.meta.EnableActiveMqTest;
-import com.jupiter.tools.spring.test.activemq.extension.expected.Bar;
 import com.jupiter.tools.spring.test.activemq.extension.expected.Foo;
-import com.jupiter.tools.spring.test.activemq.extension.expected.list.messages.ActiveMqExpectedListOfMessagesExtension;
+import com.jupiter.tools.spring.test.activemq.extension.expected.FooWithBar;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jms.core.JmsTemplate;
@@ -19,35 +18,40 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 /**
- * Created on 07.08.2018.
+ * Created on 25.03.2019.
  *
  * @author Korovin Anatoliy
  */
-@SpringBootTest
 @EnableActiveMqTest
-@ExtendWith(ActiveMqExpectedListOfMessagesExtension.class)
-public class ExpectedListOfMessagesTest {
+public class ActiveMqSmartDataSetTest {
 
     @Autowired
     private JmsTemplate jmsTemplate;
 
     @Test
     @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json")
-    void testSend() {
+    void testSendListOfMessages() {
         jmsTemplate.convertAndSend("test-queue", new Foo("123"));
         jmsTemplate.convertAndSend("test-queue", new Foo("456"));
         jmsTemplate.convertAndSend("test-queue", new Foo("789"));
     }
 
     @Test
-    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_multiple_types.json")
-    void sendMultipleTypes() {
-        // first type:
-        jmsTemplate.convertAndSend("test-queue", new Foo("123"));
-        // second type:
-        jmsTemplate.convertAndSend("test-queue", new Bar("AAA", 1));
-        jmsTemplate.convertAndSend("test-queue", new Bar("BBB",2));
-        jmsTemplate.convertAndSend("test-queue", new Bar("CCC",3));
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_js.json")
+    void testExpectedDataSetWithJavaScript() {
+        jmsTemplate.convertAndSend("test-queue", new Foo( String.valueOf(1+2+3+4+5)));
+    }
+
+    @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_date.json")
+    void testExpectedWithDate() {
+        // Arrange
+        FooWithBar fooWithBar = FooWithBar.builder()
+                                          // NOW
+                                          .time(new Date())
+                                          .build();
+        // Act
+        jmsTemplate.convertAndSend("test-queue", fooWithBar);
     }
 
     @TestConfiguration

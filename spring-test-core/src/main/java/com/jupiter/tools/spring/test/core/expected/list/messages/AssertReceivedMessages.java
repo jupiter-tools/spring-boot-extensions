@@ -1,12 +1,16 @@
 package com.jupiter.tools.spring.test.core.expected.list.messages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jupiter.tools.spring.test.core.importdata.DataSet;
-import com.jupiter.tools.spring.test.core.importdata.ImportFile;
-import com.jupiter.tools.spring.test.core.importdata.JsonImport;
+import com.jupitertools.datasetroll.DataSet;
+import com.jupitertools.datasetroll.expect.MatchDataSets;
+import com.jupitertools.datasetroll.importdata.ImportFile;
+import com.jupitertools.datasetroll.importdata.JsonImport;
 
 /**
  * Created on 27.03.2019.
@@ -58,10 +62,6 @@ public class AssertReceivedMessages {
 
     private void processingEmptyDataSet(ExpectedMessagesOptions expectedMessagesOptions) {
 
-        if (expectedMessagesOptions.isIgnoreUnexpected()) {
-            return;
-        }
-
         Object message = messageBroker.receive(expectedMessagesOptions.getQueue(),
                                                expectedMessagesOptions.getTimeout());
 
@@ -71,72 +71,71 @@ public class AssertReceivedMessages {
     }
 
     private void processingDataSet(ExpectedMessagesOptions expectedMessagesOptions,
-                                   DataSet expectedDataSet) {
+                                   DataSet expectedDataSet){
 
-        Map<String, List<Map<String, Object>>> expectedDataMap = expectedDataSet.read();
+        List<Object> receivedMessages = new ArrayList<>();
         long startTime = System.currentTimeMillis();
-        boolean processing = true;
-        while (processing) {
+        while (true) {
 
             Object message = messageBroker.receive(expectedMessagesOptions.getQueue(),
                                                    expectedMessagesOptions.getTimeout());
 
             if (message == null) {
-                new Fail("expected but not found:").withObject(expectedDataMap).fire();
+                new Fail("expected but not found:").withObject(expectedDataSet.read()).fire();
             }
 
-            assertReceivedMessage(expectedMessagesOptions, expectedDataMap, message);
+            receivedMessages.add(message);
+            DataSet actualDataSet = buildDataSetFromMessages(receivedMessages);
 
-            if (isEmptyDataMap(expectedDataMap) || timeLimit(startTime, expectedMessagesOptions.getTimeout())) {
-                processing = false;
+            if(isWaitingMoreMessages(startTime, actualDataSet, expectedDataSet)){
+                continue;
             }
+
+            new MatchDataSets(actualDataSet, expectedDataSet).check();
+            return;
         }
     }
 
-    private void assertReceivedMessage(ExpectedMessagesOptions expectedMessages,
-                                       Map<String, List<Map<String, Object>>> expectedDataMap,
-                                       Object message) {
+    //TODO: replace this in a separate DataSet implementation
+	private DataSet buildDataSetFromMessages(List<Object> messages) {
 
-        String className = message.getClass().getCanonicalName();
+		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 
-        if (!expectedDataMap.containsKey(className)) {
-            if (expectedMessages.isIgnoreUnexpected()) {
-                return;
-            }
-            new Fail("not expected but found:").withObject(message).fire();
+		for (Object message : messages) {
+
+			String className = message.getClass().getCanonicalName();
+			Map<String, Object> messageFields = mapper.convertValue(message, Map.class);
+
+			List<Map<String, Object>> entry = result.get(className);
+			if (entry == null) {
+				result.put(className, new ArrayList<>(Arrays.asList(messageFields)));
+			} else {
+				entry.add(messageFields);
+			}
+		}
+
+		return () -> result;
+	}
+
+    private boolean isWaitingMoreMessages(long startTime, DataSet actual, DataSet expected) {
+
+        if (timeLimit(startTime, expectedMessagesOptions.getTimeout())) {
+            System.out.println("Timeout was reached.");
+            return false;
         }
 
-        Map<String, Object> map = mapper.convertValue(message, Map.class);
-        if (!expectedDataMap.get(className).contains(map)) {
-            if (expectedMessages.isIgnoreUnexpected()) {
-                return;
-            }
-            new Fail("not expected but found: `" + className + "`:").withObject(message).fire();
-        }
+        return getMessageCount(actual) < getMessageCount(expected);
+    }
 
-        removeEntryFromExpected(expectedDataMap, className, map);
+    private int getMessageCount(DataSet dataSet) {
+        return dataSet.read()
+                      .entrySet()
+                      .stream()
+                      .mapToInt(e -> e.getValue().size())
+                      .sum();
     }
 
     private boolean timeLimit(long startTime, long timeout) {
         return (System.currentTimeMillis() - startTime > timeout);
-    }
-
-    /**
-     * remove entry from expected map,
-     * and remove key from expected if this entry was last.
-     */
-    private void removeEntryFromExpected(Map<String, List<Map<String, Object>>> source,
-                                         String entryClassName,
-                                         Map<String, Object> entry) {
-        source.get(entryClassName).remove(entry);
-        if (source.get(entryClassName).isEmpty()) {
-            source.remove(entryClassName);
-        }
-    }
-
-    private boolean isEmptyDataMap(Map<String, List<Map<String, Object>>> dataMap) {
-        return dataMap.values()
-                      .stream()
-                      .allMatch(List::isEmpty);
     }
 }
