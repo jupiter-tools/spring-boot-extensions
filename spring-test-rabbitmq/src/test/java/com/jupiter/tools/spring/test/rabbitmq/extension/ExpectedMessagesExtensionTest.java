@@ -77,6 +77,28 @@ class ExpectedMessagesExtensionTest {
     }
 
     @Test
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_partial.json")
+    void testExpectedPartialFields() {
+
+        Foo childFoo = new Foo("child foo");
+        Bar childBar = new Bar("child bar", 1);
+        FooWithBar child = FooWithBar.builder()
+                                     .foo(childFoo)
+                                     .bar(childBar)
+                                     .build();
+
+        Foo foo = new Foo("parent foo");
+        Bar bar = new Bar("parent bar", 2);
+        FooWithBar fooWithBar = FooWithBar.builder()
+                                          .foo(foo)
+                                          .bar(bar)
+                                          .child(child)
+                                          .build();
+
+        amqpTemplate.convertAndSend("test-queue", fooWithBar);
+    }
+
+    @Test
     @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages_with_js.json")
     void testExpectedDataSetWithJavaScript() {
         amqpTemplate.convertAndSend("test-queue", new Foo( String.valueOf(1+2+3+4+5)));

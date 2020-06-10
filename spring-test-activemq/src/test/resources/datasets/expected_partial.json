@@ -1,0 +1,17 @@
+{
+  "com.jupiter.tools.spring.test.activemq.extension.expected.FooWithBar": [
+    {
+      "foo": {
+        "value": "parent foo"
+      },
+      "bar": {
+        "name": "parent bar"
+      },
+      "child": {
+        "foo": {
+          "value": "child foo"
+        }
+      }
+    }
+  ]
+}
