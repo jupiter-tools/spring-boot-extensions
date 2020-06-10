@@ -4,14 +4,13 @@ import javax.jms.Message;
 
 import com.jupiter.tools.spring.test.activemq.annotation.ExpectedMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 22.01.2019.
@@ -27,14 +26,17 @@ public class ActiveMqMessageExtension implements BeforeAllCallback, AfterEachCal
 
         ExpectedMessage expectedMessage = context.getRequiredTestMethod()
                                                  .getAnnotation(ExpectedMessage.class);
-
         if(expectedMessage ==null){
             return;
         }
 
         jmsTemplate.setReceiveTimeout(expectedMessage.timeout());
         Message message = jmsTemplate.receive(expectedMessage.queue());
-        assertThat(((ActiveMQTextMessage) message).getText()).isEqualTo(expectedMessage.message());
+
+        if(message == null){
+            throw new Error(String.format("Expected but not received: %s", expectedMessage.message()));
+        }
+        Assertions.assertEquals(((ActiveMQTextMessage) message).getText(), expectedMessage.message());
     }
 
     @Override

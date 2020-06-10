@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.rabbitmq.extension;
 
 import com.jupiter.tools.spring.test.rabbitmq.annotation.ExpectedMessage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -8,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 22.01.2019.
@@ -31,7 +30,12 @@ public class RabbitMqMessageExtension implements BeforeAllCallback, AfterEachCal
         }
 
         Message message = amqpTemplate.receive(expectedMessage.queue(), expectedMessage.timeout());
-        assertThat(new String(message.getBody())).isEqualTo(expectedMessage.message());
+
+        if(message == null){
+            throw new Error(String.format("Expected but not received: %s", expectedMessage.message()));
+        }
+
+        Assertions.assertEquals(new String(message.getBody()), expectedMessage.message());
     }
 
     @Override
