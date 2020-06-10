@@ -30,7 +30,7 @@ public class ExpectedMessageTest {
     }
 
     @Test
-    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json", timeout = 10000000)
+    @ExpectedMessages(queue = "test-queue", messagesFile = "/datasets/expected_messages.json")
     void testSendListOfMessages() {
         amqpTemplate.convertAndSend("test-queue", new Foo("123"));
         amqpTemplate.convertAndSend("test-queue", new Foo("456"));
