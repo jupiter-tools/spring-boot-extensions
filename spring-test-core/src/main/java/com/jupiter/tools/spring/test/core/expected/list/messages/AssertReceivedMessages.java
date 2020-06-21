@@ -24,13 +24,11 @@ public class AssertReceivedMessages {
 
     private final ExpectedMessagesOptions expectedMessagesOptions;
     private final MessageBroker messageBroker;
-    private final ObjectMapper mapper;
 
     public AssertReceivedMessages(ExpectedMessagesOptions expectedMessagesOptions,
                                   MessageBroker messageBroker) {
         this.expectedMessagesOptions = expectedMessagesOptions;
         this.messageBroker = messageBroker;
-        this.mapper = new ObjectMapper();
     }
 
     /**
@@ -43,7 +41,10 @@ public class AssertReceivedMessages {
             return;
         }
 
-        DataSet expectedDataSet = new JsonImport(new ImportFile(expectedMessagesOptions.getMessagesFile()));
+	    DataSet expectedDataSet = new JsonImport(new ImportFile(expectedMessagesOptions.getMessagesFile()));
+	    if (expectedMessagesOptions.getExpectedDataSetPreProcessor() != null) {
+		    expectedDataSet = expectedMessagesOptions.getExpectedDataSetPreProcessor().run(expectedDataSet);
+	    }
 
         if (isEmptyDataSet(expectedDataSet)) {
             processingEmptyDataSet(expectedMessagesOptions);
@@ -52,6 +53,22 @@ public class AssertReceivedMessages {
 
         processingDataSet(expectedMessagesOptions, expectedDataSet);
     }
+
+	/**
+	 * Waits for messages and throws an exception if receive something during the waiting timeout interval.
+	 */
+	public void doAssertSilence() {
+
+		for (String queue : expectedMessagesOptions.getAllQueues()) {
+			Object message = messageBroker.receive(queue,
+			                                       expectedMessagesOptions.getTimeout());
+
+			if (message != null) {
+				new Fail("not expected but found:").withObject(message).fire();
+			}
+		}
+	}
+
 
     private boolean isEmptyDataSet(DataSet dataSet) {
         Map<String, List<Map<String, Object>>> readDataSet = dataSet.read();
@@ -85,37 +102,21 @@ public class AssertReceivedMessages {
             }
 
             receivedMessages.add(message);
-            DataSet actualDataSet = buildDataSetFromMessages(receivedMessages);
+            DataSet actualDataSet = new MessagesDataSet(receivedMessages);
 
             if(isWaitingMoreMessages(startTime, actualDataSet, expectedDataSet)){
                 continue;
             }
 
-            new MatchDataSets(actualDataSet, expectedDataSet).check();
-            return;
+	        if (expectedMessagesOptions.getActualDataSetPreProcessor() != null) {
+		        actualDataSet = expectedMessagesOptions.getActualDataSetPreProcessor()
+		                                               .run(actualDataSet);
+	        }
+
+	        new MatchDataSets(actualDataSet, expectedDataSet).check();
+	        return;
         }
     }
-
-    //TODO: replace this in a separate DataSet implementation
-	private DataSet buildDataSetFromMessages(List<Object> messages) {
-
-		Map<String, List<Map<String, Object>>> result = new HashMap<>();
-
-		for (Object message : messages) {
-
-			String className = message.getClass().getCanonicalName();
-			Map<String, Object> messageFields = mapper.convertValue(message, Map.class);
-
-			List<Map<String, Object>> entry = result.get(className);
-			if (entry == null) {
-				result.put(className, new ArrayList<>(Arrays.asList(messageFields)));
-			} else {
-				entry.add(messageFields);
-			}
-		}
-
-		return () -> result;
-	}
 
     private boolean isWaitingMoreMessages(long startTime, DataSet actual, DataSet expected) {
 
