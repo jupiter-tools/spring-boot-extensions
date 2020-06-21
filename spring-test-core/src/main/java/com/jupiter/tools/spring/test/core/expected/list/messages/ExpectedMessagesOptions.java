@@ -15,7 +15,7 @@ import lombok.Data;
 public class ExpectedMessagesOptions {
 
     /**
-     * The name of a queue for messages
+     * The name of a queue(or topic) for messages
      */
     private String queue;
 
@@ -28,4 +28,19 @@ public class ExpectedMessagesOptions {
      * The path to the JSON file with expected messages
      */
     private String messagesFile;
+
+    /**
+     * Applies to the expected data-set after retrieve from json-file
+     */
+    private DataSetPreProcessor expectedDataSetPreProcessor;
+
+    /**
+     * Applies to the actual data-set after receiving messages from queue(topic)
+     */
+    private DataSetPreProcessor actualDataSetPreProcessor;
+
+    /**
+     * The list of queues(or topics) to wait for messages when using {@link AssertReceivedMessages#doAssertSilence()}
+     */
+    private String[] allQueues;
 }
