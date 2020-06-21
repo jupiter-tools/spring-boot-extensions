@@ -60,8 +60,7 @@ public class AssertReceivedMessages {
 	public void doAssertSilence() {
 
 		for (String queue : expectedMessagesOptions.getAllQueues()) {
-			Object message = messageBroker.receive(queue,
-			                                       expectedMessagesOptions.getTimeout());
+			Object message = messageBroker.receive(queue, expectedMessagesOptions.getTimeout());
 
 			if (message != null) {
 				new Fail("not expected but found:").withObject(message).fire();
