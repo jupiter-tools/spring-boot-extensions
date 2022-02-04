@@ -45,7 +45,8 @@ public class TransactionalTestConfig {
     @AllArgsConstructor
     public static class Foo {
         @Id
-        @GeneratedValue
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(columnDefinition = "decimal(9,0)")
         private BigDecimal id;
 
         @Column(nullable = false)

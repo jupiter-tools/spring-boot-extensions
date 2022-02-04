@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created on 26.01.2019.
@@ -22,6 +24,7 @@ class EnableMsSqlDataTestTest {
 
     @Test
     @Commit
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
     void testCreate() throws Exception {

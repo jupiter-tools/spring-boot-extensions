@@ -39,6 +39,7 @@ class MsSqlTcExtensionTest {
 
     @Test
     @Commit
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
     void testCreate() throws Exception {
