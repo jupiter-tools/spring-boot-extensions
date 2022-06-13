@@ -44,4 +44,16 @@ class PostgresTcExtensionTest {
         int rnd = (int) resultList.get(0);
         Assertions.assertThat(rnd).isEqualTo(123);
     }
+
+    @Test
+    void testCustomPostgresVersion() {
+        // Arrange
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("version");
+        // Act
+        query.execute();
+        // Assert
+        Object result = query.getSingleResult();
+        Assertions.assertThat(result.toString()).contains("PostgreSQL 12");
+    }
+
 }
