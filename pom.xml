@@ -84,6 +84,7 @@
         <module>spring-test-rabbitmq</module>
         <module>spring-test-activemq</module>
         <module>spring-test-jpa</module>
+        <module>spring-test-mssql</module>
         <module>spring-test-mysql</module>
         <module>spring-test-postgres</module>
         <module>spring-test-web</module>
