@@ -13,13 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Created on 25.01.2019.
  *
  * @author Korovin Anatoliy
  */
-@SpringBootTest
 @DBRider
+@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MsSqlTcExtension.class)
 @ExtendWith(TraceSqlExtension.class)
@@ -30,11 +32,31 @@ class MsSqlTcExtensionIntegrationTest {
     @Autowired
     private TransactionalTestConfig.TestService testService;
 
+    @Autowired
+    private TransactionalTestConfig.FooRepository fooRepository;
+
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
     void testCreate() {
         testService.ok();
+    }
+
+    @Test
+    void nativeQuery() {
+        //Act & Assert
+        assertThat(fooRepository.nativeQuery()).isEqualTo("3");
+    }
+
+    @Test
+    void hostName() {
+        // Act
+        String hostName = fooRepository.nativeQuery();
+
+        System.out.println("! Host name is " + hostName + " !");
+
+        // Assert
+        assertThat(hostName).isNotNull();
     }
 
 }

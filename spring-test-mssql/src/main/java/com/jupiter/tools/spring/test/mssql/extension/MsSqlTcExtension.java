@@ -14,7 +14,7 @@ public class MsSqlTcExtension implements Extension {
     static {
         System.out.println("Start MsSql testcontainers extension...\n");
 
-        MSSQLServerContainer mssql = new MSSQLServerContainer("mcr.microsoft.com/mssql/server:2019-latest")
+        MSSQLServerContainer mssql = new MSSQLServerContainer("mcr.microsoft.com/mssql/server:2022-latest")
                 .acceptLicense();
         mssql.start();
 

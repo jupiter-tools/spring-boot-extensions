@@ -34,6 +34,9 @@ public class TransactionalTestConfig {
     public interface FooRepository extends JpaRepository<Foo, Long> {
         @Query(value = "SELECT RAND()", nativeQuery = true)
         Double rand();
+
+        @Query(value = "SELECT DATALENGTH('123')", nativeQuery = true)
+        String nativeQuery();
     }
 
     @Table(name = "foo")

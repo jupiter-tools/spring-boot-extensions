@@ -1,38 +1,41 @@
 package com.jupiter.tools.spring.test.mssql.annotation;
 
-import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.core.api.dataset.ExpectedDataSet;
-import com.github.database.rider.spring.api.DBRider;
-import com.jupiter.tools.spring.test.mssql.TransactionalTestConfig;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * Created on 26.01.2019.
  *
  * @author Korovin Anatoliy
  */
-@EnableMsSqlTestContainers
-//---->
-@SpringBootTest
-@DBRider
+@DataJpaTest
 @ExtendWith(SpringExtension.class)
-@Import(TransactionalTestConfig.class)
+@EnableMsSqlTestContainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EnableMsSqlTestContainersTest {
 
-    @Autowired
-    private TransactionalTestConfig.TestService testService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet(value = "/datasets/expected.json", ignoreCols = "ID")
-    void testCreate() {
-        testService.ok();
+    @Sql("/stored_procedures/test_procedure.sql")
+    void testStoredProcedure() {
+        // Arrange
+        Query query = entityManager.createNativeQuery("EXEC ANSWER_TO_THE_ULTIMATE_QUESTION");
+
+        // Act
+        int result = (int) query.getSingleResult();
+
+        //Assert
+        Assertions.assertThat(result).isEqualTo(42);
     }
 }
