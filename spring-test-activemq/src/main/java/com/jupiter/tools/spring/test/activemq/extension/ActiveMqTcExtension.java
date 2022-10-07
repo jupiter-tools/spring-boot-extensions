@@ -11,15 +11,15 @@ import org.testcontainers.containers.GenericContainer;
 public class ActiveMqTcExtension implements Extension {
 
     private static final Integer MQ_PORT = 61616;
-    private static GenericContainer activemq =
+    private static final GenericContainer activemq =
             new GenericContainer("rmohr/activemq:latest").withExposedPorts(MQ_PORT);
 
     static {
-
+        activemq.withReuse(true);
         activemq.start();
 
         String brokerUrl = String.format("tcp://%s:%s",
-                                         activemq.getContainerIpAddress(),
+                                         activemq.getHost(),
                                          activemq.getMappedPort(MQ_PORT));
 
         System.setProperty("spring.activemq.broker-url", brokerUrl);

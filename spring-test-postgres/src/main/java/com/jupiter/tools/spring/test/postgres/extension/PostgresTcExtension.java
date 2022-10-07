@@ -14,7 +14,8 @@ public class PostgresTcExtension implements Extension {
     static {
         System.out.println("Start Postgres testcontainers extension...\n");
 
-        PostgreSQLContainer postgres = new PostgreSQLContainer();
+        PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:14.5-alpine");
+        postgres.withReuse(true);
         postgres.start();
 
         System.setProperty("spring.datasource.driver-class-name", postgres.getDriverClassName());

@@ -4,27 +4,33 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Created on 05.02.2019.
  *
  * @author Korovin Anatoliy
+ * @author Gennady Kuzmin
  */
-public class RedirectRibbonExtension implements Extension, BeforeEachCallback, AfterAllCallback {
+public class RedirectLBExtension implements Extension, BeforeEachCallback, AfterAllCallback {
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        RedirectRibbonExtensionConfig.setClients(getClientNameFromTestClass(context));
+        getLoadBalancerClientFactory(context).addInstances(getClientNameFromTestClass(context));
     }
 
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
-        RedirectRibbonExtensionConfig.setClients();
+        getLoadBalancerClientFactory(context).clearInstances();
+    }
+
+    private LocalHostLoadBalancerClientFactory getLoadBalancerClientFactory(ExtensionContext context) {
+        return SpringExtension.getApplicationContext(context).getBean(LocalHostLoadBalancerClientFactory.class);
     }
 
     private String[] getClientNameFromTestClass(ExtensionContext context) {
         return context.getRequiredTestClass()
-                      .getAnnotation(RedirectRibbonToEmbeddedWebServer.class)
+                      .getAnnotation(RedirectLBToLocalHost.class)
                       .value();
     }
 }

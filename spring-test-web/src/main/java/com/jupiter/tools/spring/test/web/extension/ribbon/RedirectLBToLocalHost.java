@@ -1,7 +1,7 @@
 package com.jupiter.tools.spring.test.web.extension.ribbon;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.cloud.netflix.ribbon.RibbonClients;
+import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@ExtendWith(RedirectRibbonExtension.class)
-@RibbonClients(defaultConfiguration = RedirectRibbonExtensionConfig.class)
-public @interface RedirectRibbonToEmbeddedWebServer {
+@ExtendWith(RedirectLBExtension.class)
+@Import(RedirectLBExtensionConfig.class)
+public @interface RedirectLBToLocalHost {
 
     /**
      * @return List of client names which should be redirected to the embedded web server

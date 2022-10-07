@@ -14,7 +14,8 @@ public class MySqlTcExtension implements Extension {
     static {
         System.out.println("Start MySql testcontainers extension...\n");
 
-        MySQLContainer mysql = new MySQLContainer();
+        MySQLContainer mysql = new MySQLContainer("mysql:8.0.30");
+        mysql.withReuse(true);
         mysql.start();
 
         System.setProperty("spring.datasource.driver-class-name", mysql.getDriverClassName());
