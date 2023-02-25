@@ -1,8 +1,7 @@
 package com.jupiter.tools.spring.test.web.extension;
 
-import com.jupiter.tools.spring.test.web.annotation.EnableRestTest;
+import com.jupiter.tools.spring.test.web.annotation.EnableRestMvcTest;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Korovin Anatoliy
  */
-@EnableRestTest
-public class EnableRestTestTest {
+@EnableRestMvcTest
+public class EnableRestTestMvcTest {
 
     @Autowired
     private MockMvc mockMvc;

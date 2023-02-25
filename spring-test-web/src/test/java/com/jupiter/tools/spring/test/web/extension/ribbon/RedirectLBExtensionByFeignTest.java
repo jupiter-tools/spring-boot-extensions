@@ -1,11 +1,10 @@
 package com.jupiter.tools.spring.test.web.extension.ribbon;
 
-import com.jupiter.tools.spring.test.web.annotation.EnableEmbeddedWebServerTest;
 import feign.Client;
 import feign.Feign;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Korovin Anatoliy
  */
-@EnableEmbeddedWebServerTest
-@RedirectRibbonToEmbeddedWebServer("test-service")
-class RedirectRibbonExtensionByFeignTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RedirectLBToLocalHost("test-service")
+class RedirectLBExtensionByFeignTest {
 
     @Autowired
     private CustomFeign customFeign;

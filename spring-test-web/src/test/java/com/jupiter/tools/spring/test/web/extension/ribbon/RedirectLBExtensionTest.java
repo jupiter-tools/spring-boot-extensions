@@ -1,9 +1,9 @@
 package com.jupiter.tools.spring.test.web.extension.ribbon;
 
-import com.jupiter.tools.spring.test.web.annotation.EnableEmbeddedWebServerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -23,23 +23,32 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Korovin Anatoliy
  */
-@EnableEmbeddedWebServerTest
-@RedirectRibbonToEmbeddedWebServer
-class RedirectRibbonToEmbeddedWebServerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RedirectLBToLocalHost("test-service")
+class RedirectLBExtensionTest {
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Test
-    void anyClientNamesRedirectToEmbedded() {
+    void testRedirect() {
         String message = "test-message";
         // Act
-        String size = restTemplate.getForObject("http://any-service-name/messages/{message}/size",
+        String size = restTemplate.getForObject("http://test-service/messages/{message}/size",
                                                 String.class,
                                                 message);
         // Assert
         assertThat(TestCfg.messages).containsOnly(message);
         assertThat(Integer.valueOf(size)).isEqualTo(message.length());
+    }
+
+    @Test
+    void testRedirectToUnknownClient() {
+        // Act
+        Assertions.assertThrows(Exception.class,
+                                () -> restTemplate.getForObject("http://foo-service/messages/{message}/size",
+                                                                String.class,
+                                                                "test-message"));
     }
 
     @TestConfiguration

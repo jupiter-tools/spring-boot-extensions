@@ -5,7 +5,7 @@
 
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-boot-extensions-parent</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
     <packaging>pom</packaging>
 
     <name>spring-boot-extensions-parent</name>
@@ -35,10 +35,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <java.version>1.8</java.version>    
+        <java.version>1.8</java.version>
         <junit.vintage.version>5.5.0</junit.vintage.version>
-        <junit-jupiter.version>5.5.0</junit-jupiter.version>
-        <junit-platform.version>1.5.0</junit-platform.version>
+        <junit-jupiter.version>5.9.0</junit-jupiter.version>
+        <junit-platform.version>1.9.0</junit-platform.version>
+        <testcontainers.version>1.17.5</testcontainers.version>
+        <jna.version>5.12.1</jna.version>
     </properties>
 
     <developers>
@@ -75,7 +77,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>[2.0.0.RELEASE,2.3.0.RELEASE]</version>
+        <version>2.7.4</version>
         <relativePath/>
     </parent>
 
@@ -121,11 +123,6 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit-platform.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit.vintage.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -193,7 +190,7 @@
                     </formats>
                     <check/>
                 </configuration>
-            </plugin>            
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -230,7 +227,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
-                <configuration>                    
+                <configuration>
                     <reportFormat>plain</reportFormat>
                 </configuration>
             </plugin>
